@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#FAF8F3;font-family:'Figtree',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;color:#1A1A12;}
+  [data-deck-scroll]::-webkit-scrollbar{display:none;width:0;height:0}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#FAF8F3;overflow-x:clip;padding-bottom:64px">
+
+  <!-- HEADER -->
+  <header style="max-width:1280px;margin:0 auto;padding:26px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+    <div style="font-family:'Spectral',Georgia,serif;font-weight:600;font-size:25px;letter-spacing:-.01em">Arkib Reunion Negara</div>
+    <nav style="display:flex;align-items:center;gap:6px;background:#F2EFE8;border:1px solid rgba(20,18,12,.06);padding:5px;border-radius:999px">
+      <span style="padding:8px 18px;border-radius:999px;background:#fff;font-weight:600;font-size:15px;box-shadow:0 1px 3px rgba(20,18,12,.08)">Utama</span>
+      <span style="padding:8px 18px;border-radius:999px;font-weight:500;font-size:15px;color:rgba(26,26,18,.62)">Arkib</span>
+      <span style="padding:8px 18px;border-radius:999px;font-weight:500;font-size:15px;color:rgba(26,26,18,.62)">Bantuan</span>
+    </nav>
+    <div style="display:flex;align-items:center;gap:9px;padding:9px 18px;border:1px solid rgba(20,18,12,.14);border-radius:999px;font-weight:600;font-size:15px">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#1A1A12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-4 3-6 7-6s7 2 7 6"/></svg>
+      Log Masuk
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section style="max-width:760px;margin:34px auto 0;padding:0 24px;text-align:center">
+    <div style="font-weight:700;font-size:14px;letter-spacing:.16em;color:#2C6BED;text-transform:uppercase">Rekod Rasmi</div>
+    <h1 style="font-family:'Spectral',Georgia,serif;font-weight:600;font-size:clamp(30px,5vw,46px);line-height:1.12;letter-spacing:-.015em;margin:16px 0 0;text-wrap:balance">Rancang reunion. Simpan rekod.<br>Elak tanya dalam WhatsApp 14 kali.</h1>
+    <p style="font-size:clamp(15px,2.4vw,18px);line-height:1.6;color:rgba(26,26,18,.6);max-width:540px;margin:18px auto 0;text-wrap:pretty">Tempat rasmi untuk simpan keputusan, tugasan, dan kenangan. Bukan sekadar bergantung pada chat yang tenggelam.</p>
+  </section>
+
+  <!-- DECK -->
+  <section style="position:relative;max-width:1280px;margin:14px auto 0;padding:0">
+
+    <sc-if value="{{ showArrows }}" hint-placeholder-val="{{ true }}">
+      <button onClick="{{ prev }}" aria-label="Sebelumnya" style="{{ arrowLeftStyle }}">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1A1A12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <button onClick="{{ next }}" aria-label="Seterusnya" style="{{ arrowRightStyle }}">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1A1A12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </sc-if>
+
+    <div ref="{{ setScrollRef }}" onScroll="{{ onScroll }}" onPointerDown="{{ onDragStart }}" onPointerMove="{{ onDragMove }}" onPointerUp="{{ onDragEnd }}" onPointerLeave="{{ onDragEnd }}" onPointerCancel="{{ onDragEnd }}" data-deck-scroll="1" style="{{ viewportStyle }}">
+      <div style="{{ trackStyle }}">
+        <sc-for list="{{ cards }}" as="card" hint-placeholder-count="5">
+          <div style="{{ card.slideStyle }}">
+            <div ref="{{ card.setRef }}" onClick="{{ card.onSelect }}" style="{{ card.cardStyle }}">
+
+              <!-- SUMMARY -->
+              <sc-if value="{{ card.isSummary }}" hint-placeholder-val="{{ true }}">
+                <div style="text-align:center">
+                  <span style="display:inline-block;padding:6px 14px;border-radius:999px;background:#E9F0FF;color:#2C6BED;font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase">Fail Semasa</span>
+                </div>
+                <h3 style="font-family:'Spectral',Georgia,serif;font-weight:600;font-size:27px;line-height:1.12;letter-spacing:-.01em;text-align:center;margin:16px 0 0">Asmarian<br>Gathering 2026</h3>
+                <p style="text-align:center;font-size:14px;line-height:1.5;color:rgba(26,26,18,.6);margin:12px 14px 0;text-wrap:pretty">Rekod rasmi untuk gathering yang katanya reunion tapi tahunan.</p>
+                <div style="margin-top:18px">
+                  <div style="display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid rgba(20,18,12,.08)">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1A1A12" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 3v4M16 3v4"/></svg>
+                    <span style="width:60px;flex:none;font-size:13px;color:rgba(26,26,18,.5);font-weight:500">Tarikh</span>
+                    <span style="font-size:14px;font-weight:600">20–22 Jun 2026</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid rgba(20,18,12,.08)">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1A1A12" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l3.2 2"/></svg>
+                    <span style="width:60px;flex:none;font-size:13px;color:rgba(26,26,18,.5);font-weight:500">Tempoh</span>
+                    <span style="font-size:14px;font-weight:600">3 Hari 2 Malam</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid rgba(20,18,12,.08)">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1A1A12" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                    <span style="width:60px;flex:none;font-size:13px;color:rgba(26,26,18,.5);font-weight:500">Lokasi</span>
+                    <span style="font-size:14px;font-weight:600">A'Famosa Resort, Melaka</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid rgba(20,18,12,.08)">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1A1A12" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.4 2.5-5.6 5.5-5.6s5.5 2.2 5.5 5.6"/><path d="M16.5 6.6a3 3 0 0 1 0 5.6M17 20c0-2.4-.9-4.2-2.4-5.2"/></svg>
+                    <span style="width:60px;flex:none;font-size:13px;color:rgba(26,26,18,.5);font-weight:500">Peserta</span>
+                    <span style="font-size:14px;font-weight:600">58 orang berdaftar</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:10px 2px">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1A1A12" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3.5"/></svg>
+                    <span style="width:60px;flex:none;font-size:13px;color:rgba(26,26,18,.5);font-weight:500">Nota</span>
+                    <span style="font-size:14px;font-weight:600">Jangan lupa bawa buah tangan.</span>
+                  </div>
+                </div>
+                <div style="flex:1;min-height:14px"></div>
+                <div style="{{ card.ctaStyle }}">
+                  Lihat Ringkasan
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+                </div>
+              </sc-if>
+
+              <!-- COLORED -->
+              <sc-if value="{{ card.isColored }}" hint-placeholder-val="{{ true }}">
+                <sc-if value="{{ card.isAlbum }}" hint-placeholder-val="{{ true }}">
+                  <div style="text-align:center;margin-bottom:6px"><span style="display:inline-block;padding:5px 13px;border-radius:999px;border:1.5px solid rgba(26,26,18,.38);font-weight:600;font-size:11px;letter-spacing:.04em">Coming Soon</span></div>
+                </sc-if>
+                <h3 style="{{ card.titleStyle }}">{{ card.title }}</h3>
+                <p style="{{ card.taglineStyle }}">{{ card.tagline }}</p>
+
+                <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:10px 0">
+                  <sc-if value="{{ card.isView }}" hint-placeholder-val="{{ true }}">
+                    <svg viewBox="0 0 130 152" width="100%" style="max-width:150px;display:block">
+                      <rect x="22" y="22" width="86" height="116" rx="11" fill="#fff" stroke="#15140f" stroke-width="5"/>
+                      <rect x="48" y="13" width="34" height="20" rx="6" fill="#fff" stroke="#15140f" stroke-width="5"/>
+                      <path d="M37 58 l7 7 l13 -15" fill="none" stroke="#15140f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <line x1="64" y1="59" x2="94" y2="59" stroke="#15140f" stroke-width="5" stroke-linecap="round"/>
+                      <path d="M37 86 l7 7 l13 -15" fill="none" stroke="#15140f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <line x1="64" y1="87" x2="94" y2="87" stroke="#15140f" stroke-width="5" stroke-linecap="round"/>
+                      <line x1="37" y1="114" x2="74" y2="114" stroke="#15140f" stroke-width="5" stroke-linecap="round"/>
+                      <line x1="37" y1="124" x2="60" y2="124" stroke="#15140f" stroke-width="5" stroke-linecap="round"/>
+                    </svg>
+                  </sc-if>
+                  <sc-if value="{{ card.isGift }}" hint-placeholder-val="{{ true }}">
+                    <svg viewBox="0 0 150 140" width="100%" style="max-width:158px;display:block">
+                      <rect x="30" y="62" width="90" height="62" rx="7" fill="#fff" stroke="#15140f" stroke-width="5"/>
+                      <rect x="23" y="46" width="104" height="22" rx="6" fill="#fff" stroke="#15140f" stroke-width="5"/>
+                      <line x1="75" y1="46" x2="75" y2="124" stroke="#15140f" stroke-width="5"/>
+                      <path d="M75 46 C 60 22, 38 26, 46 42 C 51 51, 67 48, 75 46 Z" fill="#fff" stroke="#15140f" stroke-width="5" stroke-linejoin="round"/>
+                      <path d="M75 46 C 90 22, 112 26, 104 42 C 99 51, 83 48, 75 46 Z" fill="#fff" stroke="#15140f" stroke-width="5" stroke-linejoin="round"/>
+                    </svg>
+                  </sc-if>
+                  <sc-if value="{{ card.isWork }}" hint-placeholder-val="{{ true }}">
+                    <svg viewBox="0 0 130 152" width="100%" style="max-width:150px;display:block">
+                      <rect x="22" y="22" width="86" height="116" rx="11" fill="#fff" stroke="#15140f" stroke-width="5"/>
+                      <rect x="48" y="13" width="34" height="20" rx="6" fill="#fff" stroke="#15140f" stroke-width="5"/>
+                      <rect x="35" y="50" width="17" height="17" rx="3" fill="none" stroke="#15140f" stroke-width="5"/>
+                      <path d="M39 58 l4 4 l7 -8" fill="none" stroke="#15140f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                      <line x1="60" y1="59" x2="95" y2="59" stroke="#15140f" stroke-width="5" stroke-linecap="round"/>
+                      <rect x="35" y="78" width="17" height="17" rx="3" fill="none" stroke="#15140f" stroke-width="5"/>
+                      <path d="M39 86 l4 4 l7 -8" fill="none" stroke="#15140f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                      <line x1="60" y1="87" x2="95" y2="87" stroke="#15140f" stroke-width="5" stroke-linecap="round"/>
+                      <rect x="35" y="106" width="17" height="17" rx="3" fill="none" stroke="#15140f" stroke-width="5"/>
+                      <line x1="60" y1="115" x2="88" y2="115" stroke="#15140f" stroke-width="5" stroke-linecap="round"/>
+                    </svg>
+                  </sc-if>
+                  <sc-if value="{{ card.isAlbum }}" hint-placeholder-val="{{ true }}">
+                    <svg viewBox="0 0 156 140" width="100%" style="max-width:160px;display:block">
+                      <g transform="rotate(-9 70 80)"><rect x="28" y="38" width="80" height="80" rx="7" fill="#fff" stroke="#15140f" stroke-width="5"/></g>
+                      <rect x="44" y="32" width="80" height="80" rx="7" fill="#fff" stroke="#15140f" stroke-width="5"/>
+                      <circle cx="66" cy="56" r="8" fill="#15140f"/>
+                      <path d="M50 100 l18 -26 l13 16 l11 -13 l16 23 z" fill="#15140f"/>
+                      <rect x="100" y="92" width="34" height="26" rx="5" fill="#fff" stroke="#15140f" stroke-width="5"/>
+                      <path d="M106 92 v-5 a11 11 0 0 1 22 0 v5" fill="none" stroke="#15140f" stroke-width="5"/>
+                      <circle cx="117" cy="104" r="3.4" fill="#15140f"/>
+                    </svg>
+                  </sc-if>
+                </div>
+
+                <div style="{{ card.ctaStyle }}">
+                  {{ card.cta }}
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+                </div>
+              </sc-if>
+
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- DOTS -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:9px;margin-top:18px">
+      <sc-for list="{{ dots }}" as="dot" hint-placeholder-count="5">
+        <button onClick="{{ dot.onSelect }}" aria-label="Pergi ke kad" style="{{ dot.style }}"></button>
+      </sc-for>
+    </div>
+
+  </section>
+
+  <!-- PAST REUNIONS -->
+  <section style="max-width:1180px;margin:50px auto 0;padding:0 32px">
+    <h2 style="font-family:'Spectral',Georgia,serif;font-weight:600;font-size:clamp(24px,3.4vw,32px);text-align:center;letter-spacing:-.01em;margin:0">Reunion Terdahulu</h2>
+    <p style="text-align:center;color:rgba(26,26,18,.55);font-size:16px;margin:10px 0 26px">Arkib untuk tahun-tahun yang lepas. Bukti reunion memang pernah berlaku.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+      <div style="display:flex;align-items:center;gap:16px;padding:20px;border:1px solid rgba(20,18,12,.1);border-radius:16px;background:#fff">
+        <div style="width:54px;height:54px;flex:none;border:1.5px solid rgba(20,18,12,.18);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">2025</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:16px">Asmarian Gathering 2025</div><div style="font-size:14px;color:rgba(26,26,18,.55)">Setiap tahun, alasan yang sama.</div></div>
+        <span style="display:flex;align-items:center;gap:5px;font-weight:600;font-size:14px;color:rgba(26,26,18,.7)">Lihat Arkib<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:20px;border:1px solid rgba(20,18,12,.1);border-radius:16px;background:#fff">
+        <div style="width:54px;height:54px;flex:none;border:1.5px solid rgba(20,18,12,.18);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">2024</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:16px">Asmarian Gathering 2024</div><div style="font-size:14px;color:rgba(26,26,18,.55)">Hujan lebat, tetap jadi.</div></div>
+        <span style="display:flex;align-items:center;gap:5px;font-weight:600;font-size:14px;color:rgba(26,26,18,.7)">Lihat Arkib<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:20px;border:1px solid rgba(20,18,12,.1);border-radius:16px;background:#fff">
+        <div style="width:54px;height:54px;flex:none;border:1.5px solid rgba(20,18,12,.18);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">2023</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:16px">Asmarian Gathering 2023</div><div style="font-size:14px;color:rgba(26,26,18,.55)">Permulaan yang tak dirancang.</div></div>
+        <span style="display:flex;align-items:center;gap:5px;font-weight:600;font-size:14px;color:rgba(26,26,18,.7)">Lihat Arkib<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;startCard&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;View Plan&quot;,&quot;Tukar Hadiah&quot;,&quot;Summary / Fail Semasa&quot;,&quot;Gerak Kerja&quot;,&quot;Album Rahsia&quot;],&quot;default&quot;:&quot;Summary / Fail Semasa&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showArrows&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;reducedMotion&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { active: 2, containerW: 1180, isMobile: false };
+  cardEls = [];
+
+  componentDidMount() {
+    this._prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.measure();
+    [0, 60, 160, 320, 600].forEach((d) => setTimeout(() => this.initLayout(), d));
+    this._onResize = () => { this.measure(); setTimeout(() => { if (!this._userInteracted) this.centerOn(this.state.active, false); this.updateTransforms(); }, 0); };
+    window.addEventListener('resize', this._onResize);
+    this._onKey = (e) => {
+      if (e.key === 'ArrowLeft') this.goBy(-1);
+      else if (e.key === 'ArrowRight') this.goBy(1);
+    };
+    window.addEventListener('keydown', this._onKey);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('keydown', this._onKey);
+    if (this._raf) cancelAnimationFrame(this._raf);
+  }
+  componentDidUpdate() {
+    this.updateTransforms();
+    if (this._pendingCenter != null && this.cardEls[this._pendingCenter]) {
+      const idx = this._pendingCenter; this._pendingCenter = null;
+      this.centerOn(idx, false);
+      if (idx !== this.state.active) this.setState({ active: idx });
+      else this.updateTransforms();
+    }
+  }
+
+  reducedMotion() { return !!this.props.reducedMotion || !!this._prefersReduced; }
+
+  startIndexFromProp() {
+    const map = { 'View Plan': 0, 'Tukar Hadiah': 1, 'Summary / Fail Semasa': 2, 'Gerak Kerja': 3, 'Album Rahsia': 4 };
+    return map[this.props.startCard] ?? 2;
+  }
+
+  setScrollRef = (el) => {
+    if (!el || this.scrollEl === el) return;
+    this.scrollEl = el;
+    this._pendingCenter = this.startIndexFromProp();
+    this.measure();        // pick up the real viewport width
+    this.forceUpdate();    // render with correct sizes, then centre in componentDidUpdate
+  };
+
+  measure() {
+    const w = this.scrollEl ? this.scrollEl.clientWidth : window.innerWidth;
+    if (w && (w !== this.state.containerW || (window.innerWidth < 760) !== this.state.isMobile)) {
+      this.setState({ containerW: w, isMobile: window.innerWidth < 760 });
+    }
+  }
+
+  // geometry of a slide relative to the viewport centre, in slide-width units
+  centerOn(i, smooth) {
+    const el = this.cardEls[i]; if (!el || !this.scrollEl) return;
+    const slide = el.parentElement;
+    const left = slide.offsetLeft + slide.offsetWidth / 2 - this.scrollEl.clientWidth / 2;
+    if (smooth && !this.reducedMotion()) this.animateScroll(left);
+    else { if (this._scrollRaf) cancelAnimationFrame(this._scrollRaf); this.scrollEl.scrollLeft = left; }
+  }
+  // own tween — native scrollTo({behavior:'smooth'}) is a no-op under scroll-snap mandatory,
+  // and mandatory snap re-snaps each frame, so suspend it for the duration of the tween.
+  animateScroll(to) {
+    const vp = this.scrollEl; if (!vp) return;
+    if (this._scrollRaf) cancelAnimationFrame(this._scrollRaf);
+    if (this._scrollTimer) clearTimeout(this._scrollTimer);
+    const from = vp.scrollLeft, dist = to - from;
+    this._animating = true;
+    vp.style.scrollSnapType = 'none';
+    if (Math.abs(dist) < 1) { vp.scrollLeft = to; this.endTween(); return; }
+    const dur = Math.min(560, 260 + Math.abs(dist) * 0.5), t0 = performance.now();
+    const ease = (p) => 1 - Math.pow(1 - p, 3);
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      vp.scrollLeft = from + dist * ease(p);
+      if (p < 1) { this._scrollRaf = requestAnimationFrame(step); }
+      else { this._scrollRaf = null; vp.scrollLeft = to; this.endTween(); }
+    };
+    this._scrollRaf = requestAnimationFrame(step);
+    // safety: guarantee a correct landing + snap restore even if rAF is throttled
+    this._scrollTimer = setTimeout(() => { if (this._animating) { vp.scrollLeft = to; this.endTween(); } }, dur + 160);
+  }
+  endTween = () => {
+    if (this._scrollRaf) { cancelAnimationFrame(this._scrollRaf); this._scrollRaf = null; }
+    if (this._scrollTimer) { clearTimeout(this._scrollTimer); this._scrollTimer = null; }
+    if (this._animating && this.scrollEl) this.scrollEl.style.scrollSnapType = 'x mandatory';
+    this._animating = false;
+    this.updateTransforms();
+  };
+  goBy(d) { this.centerOn(Math.max(0, Math.min(4, this.state.active + d)), true); }
+  prev = () => this.goBy(-1);
+  next = () => this.goBy(1);
+
+  onScroll = () => {
+    if (this._raf) return;
+    this._raf = requestAnimationFrame(() => { this._raf = null; this.updateTransforms(); });
+  };
+
+  // mouse-only click-drag to pan. touch is left 100% native (scroll-snap handles it),
+  // so vertical scrolling never gets trapped.
+  onDragStart = (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0 || !this.scrollEl) return;
+    this._md = true; this._moved = false;
+    this._mx = e.clientX; this._msl = this.scrollEl.scrollLeft;
+    if (this._scrollRaf) { cancelAnimationFrame(this._scrollRaf); this._scrollRaf = null; }
+    this.scrollEl.style.scrollSnapType = 'none';
+    this.scrollEl.style.cursor = 'grabbing';
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {}
+  };
+  onDragMove = (e) => {
+    if (!this._md) return;
+    const dx = e.clientX - this._mx;
+    if (Math.abs(dx) > 3) this._moved = true;
+    this.scrollEl.scrollLeft = this._msl - dx;
+  };
+  onDragEnd = (e) => {
+    if (!this._md) return;
+    this._md = false;
+    if (this.scrollEl) this.scrollEl.style.cursor = 'grab';
+    this._justDragged = this._moved;
+    setTimeout(() => { this._justDragged = false; }, 60);
+    const vp = this.scrollEl; if (!vp) return;
+    const center = vp.scrollLeft + vp.clientWidth / 2;
+    let best = 0, bd = Infinity;
+    this.cardEls.forEach((el, i) => { if (!el) return; const s = el.parentElement; const d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - center); if (d < bd) { bd = d; best = i; } });
+    this.centerOn(best, true);
+  };
+
+  updateTransforms() {
+    const vp = this.scrollEl; if (!vp || !this.cardEls) return;
+    const center = vp.scrollLeft + vp.clientWidth / 2;
+    let nearest = 0, nd = Infinity;
+    for (let i = 0; i < this.cardEls.length; i++) {
+      const el = this.cardEls[i]; if (!el) continue;
+      const slide = el.parentElement;
+      const sc = slide.offsetLeft + slide.offsetWidth / 2;
+      const d = (sc - center) / slide.offsetWidth;       // signed distance in slide units
+      const ad = Math.abs(d);
+      const scale = Math.max(0.7, 1 - ad * 0.12);
+      const rot = Math.max(-6, Math.min(6, d * 1.6));
+      const ty = ad * 22;
+      const op = ad > 2.7 ? 0 : 1;
+      el.style.transform = `translateY(${ty}px) scale(${scale}) rotate(${rot}deg)`;
+      el.style.zIndex = String(Math.round(100 - ad * 10));
+      el.style.opacity = String(op);
+      el.style.boxShadow = ad < 0.5
+        ? '0 20px 46px rgba(20,18,12,.20), 0 4px 14px rgba(20,18,12,.10)'
+        : ad < 1.5 ? '0 14px 30px rgba(20,18,12,.14)' : '0 9px 22px rgba(20,18,12,.12)';
+      el.style.pointerEvents = op === 0 ? 'none' : 'auto';
+      const dist = Math.abs(sc - center);
+      if (dist < nd) { nd = dist; nearest = i; }
+    }
+    if (nearest !== this.state.active) this.setState({ active: nearest });
+  }
+
+  renderVals() {
+    const DATA = [
+      { id: 'view',    title: 'View Plan',    tagline: 'Apa pakai, apa makan, apa jadi — semua dekat sini.',         cta: 'Lihat Plan',     bg: '#2C6BED', text: '#ffffff', sub: 'rgba(255,255,255,.82)', illo: 'view' },
+      { id: 'gift',    title: 'Tukar Hadiah', tagline: 'Cabutan nama, wishlist, dan sedikit unsur suspen.',          cta: 'Lihat Hadiah',   bg: '#F0503C', text: '#ffffff', sub: 'rgba(255,255,255,.88)', illo: 'gift' },
+      { id: 'summary', title: 'Asmarian Gathering 2026', tagline: '', cta: 'Lihat Ringkasan', bg: '#FFFEFB', text: '#1A1A12', sub: '', illo: 'summary', isSummary: true },
+      { id: 'work',    title: 'Gerak Kerja',  tagline: 'Untuk kerja yang perlu jalan, bukan sekadar dibincangkan.',  cta: 'Lihat Tugas',    bg: '#1E6A3D', text: '#ffffff', sub: 'rgba(255,255,255,.82)', illo: 'work' },
+      { id: 'album',   title: 'Album Rahsia', tagline: 'Untuk kenangan yang tak sesuai dibiarkan berkeliaran.',      cta: 'Tak Payah Tunggu', bg: '#F4C420', text: '#1A1A12', sub: 'rgba(26,26,18,.66)', illo: 'album' },
+    ];
+
+    const { active, isMobile, containerW } = this.state;
+    const cardW = isMobile ? Math.min(Math.round(containerW * 0.84), 380) : 300;
+    const cardH = isMobile ? Math.round(cardW * 1.48) : 460;
+    const slideW = isMobile ? Math.round(containerW * 0.72) : 214;
+    const sidePad = Math.max(16, Math.round((containerW - slideW) / 2));
+    const deckH = cardH + (isMobile ? 64 : 96);
+    const reduced = this.reducedMotion();
+    const SERIF = "'Spectral',Georgia,serif";
+
+    const cards = DATA.map((c, i) => {
+      const ctaIsDark = !!c.isSummary;
+      const ctaStyle = {
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        gap: '10px', width: '100%', padding: '13px 18px', borderRadius: '12px',
+        background: ctaIsDark ? '#15140f' : '#ffffff',
+        color: ctaIsDark ? '#ffffff' : '#15140f',
+        fontWeight: 600, fontSize: '14.5px',
+        boxShadow: ctaIsDark ? 'none' : '0 2px 6px rgba(20,18,12,.10)',
+        flex: 'none',
+      };
+      const cardStyle = {
+        width: cardW + 'px', height: cardH + 'px',
+        background: c.bg, color: c.text, borderRadius: '22px',
+        border: c.isSummary ? '1px solid rgba(20,18,12,.08)' : 'none',
+        padding: '24px 22px', boxSizing: 'border-box',
+        display: 'flex', flexDirection: 'column',
+        cursor: 'pointer', userSelect: 'none', WebkitUserSelect: 'none',
+        transformOrigin: 'center center', willChange: 'transform',
+        transform: 'translateY(0) scale(1)',
+        boxShadow: '0 9px 22px rgba(20,18,12,.12)',
+        flex: 'none',
+      };
+      const slideStyle = {
+        flex: '0 0 ' + slideW + 'px', width: slideW + 'px', minWidth: 0, height: '100%',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        scrollSnapAlign: 'center', scrollSnapStop: 'normal',
+      };
+      return {
+        ...c,
+        isColored: !c.isSummary,
+        isView: c.illo === 'view', isGift: c.illo === 'gift', isWork: c.illo === 'work', isAlbum: c.illo === 'album',
+        cardStyle, slideStyle, ctaStyle,
+        titleStyle: { fontFamily: SERIF, fontWeight: 600, fontSize: '24px', lineHeight: 1.15, letterSpacing: '-.01em', textAlign: 'center', margin: '2px 0 0' },
+        taglineStyle: { textAlign: 'center', fontSize: '14px', lineHeight: 1.5, color: c.sub, margin: '10px 8px 0', textWrap: 'pretty' },
+        setRef: (el) => { this.cardEls[i] = el; },
+        onSelect: () => { if (this._justDragged) return; this.centerOn(i, true); },
+      };
+    });
+
+    const dots = DATA.map((c, i) => {
+      const on = i === active;
+      return {
+        onSelect: () => this.centerOn(i, true),
+        style: {
+          width: on ? '26px' : '9px', height: '9px', borderRadius: '999px',
+          background: on ? '#1A1A12' : 'rgba(26,26,18,.2)',
+          border: 'none', padding: 0, cursor: 'pointer',
+          transition: 'width .3s ease, background .3s ease',
+        },
+      };
+    });
+
+    const viewportStyle = {
+      position: 'relative', height: deckH + 'px',
+      overflowX: 'auto', overflowY: 'hidden',
+      scrollSnapType: 'x mandatory',
+      overscrollBehaviorX: 'contain',
+      scrollbarWidth: 'none', msOverflowStyle: 'none',
+      WebkitOverflowScrolling: 'touch',
+      cursor: isMobile ? 'auto' : 'grab',
+    };
+    const trackStyle = {
+      display: 'flex', alignItems: 'center', height: '100%',
+      width: 'max-content', paddingLeft: sidePad + 'px', paddingRight: sidePad + 'px',
+    };
+
+    const arrowBase = (disabled) => ({
+      position: 'absolute', top: 'calc(50% - 9px)', transform: 'translateY(-50%)',
+      width: '48px', height: '48px', borderRadius: '999px',
+      background: '#fff', border: '1px solid rgba(20,18,12,.08)',
+      boxShadow: '0 4px 14px rgba(20,18,12,.12)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      cursor: disabled ? 'default' : 'pointer', zIndex: 200,
+      opacity: disabled ? 0.32 : 1, pointerEvents: disabled ? 'none' : 'auto',
+    });
+    const showArrows = !isMobile && (this.props.showArrows ?? true);
+
+    return {
+      cards, dots, showArrows,
+      prev: this.prev, next: this.next,
+      setScrollRef: this.setScrollRef, onScroll: this.onScroll,
+      onDragStart: this.onDragStart, onDragMove: this.onDragMove, onDragEnd: this.onDragEnd,
+      viewportStyle, trackStyle,
+      arrowLeftStyle: { ...arrowBase(active === 0), left: '8px' },
+      arrowRightStyle: { ...arrowBase(active === 4), right: '8px' },
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" role="img" aria-labelledby="title">
+  <title id="title">Current file illustration</title>
+  <rect x="48" y="38" width="144" height="112" rx="12" fill="#fffefa" stroke="#171717" stroke-width="6"/>
+  <path d="M72 68h96M72 92h96M72 116h62" fill="none" stroke="#171717" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="78" cy="68" r="4" fill="#171717"/>
+  <circle cx="78" cy="92" r="4" fill="#171717"/>
+  <circle cx="78" cy="116" r="4" fill="#171717"/>
+  <path d="M148 38v34h44" fill="none" stroke="#171717" stroke-width="6" stroke-linejoin="round"/>
+</svg>

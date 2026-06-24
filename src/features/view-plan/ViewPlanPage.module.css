@@ -1,0 +1,589 @@
+.page {
+  display: grid;
+  gap: 26px;
+  padding: 30px 0 var(--space-section);
+}
+
+.backLink {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 0 16px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 8px 22px rgba(18, 18, 18, 0.05);
+}
+
+.tabRoot {
+  display: grid;
+  gap: 22px;
+}
+
+.tabs {
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  padding: 4px;
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  box-shadow: 0 14px 34px rgba(18, 18, 18, 0.07);
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 0 13px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.84rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.tab[data-active] {
+  border-color: var(--color-text);
+  background: var(--color-text);
+  color: var(--color-surface);
+  transform: translateY(-1px);
+}
+
+.tabIcon {
+  flex: 0 0 auto;
+}
+
+.tab:focus-visible,
+.decisionButton:focus-visible,
+.dialogClose:focus-visible {
+  outline: 3px solid rgba(20, 99, 232, 0.24);
+  outline-offset: 2px;
+}
+
+.panels {
+  display: grid;
+}
+
+.panel {
+  min-height: 520px;
+}
+
+.section {
+  display: grid;
+  gap: 18px;
+}
+
+.sectionHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.sectionHeader > p {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  margin: 0;
+  background: var(--color-surface);
+  font-family: var(--font-accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.sectionTitle {
+  display: grid;
+  gap: 4px;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.3vw, 1.65rem);
+  font-weight: 560;
+  line-height: 1;
+}
+
+.sectionTitle span {
+  display: block;
+  color: var(--color-muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.sectionActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.outfitGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.recordCard,
+.menuGroup {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  padding: 20px;
+  background: var(--color-surface);
+  box-shadow: 0 14px 34px rgba(18, 18, 18, 0.06);
+}
+
+.recordCard {
+  display: grid;
+  gap: 14px;
+}
+
+.recordTopline,
+.menuTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--color-muted);
+}
+
+.recordTopline span {
+  font-family: var(--font-accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.recordCard h3,
+.menuTitle h3,
+.timelineContent h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 560;
+  line-height: 1.15;
+}
+
+.bodyText {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.pollList {
+  display: grid;
+  gap: 8px;
+}
+
+.pollOption {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 0 12px;
+  background: var(--color-surface);
+  font-size: 0.88rem;
+}
+
+.pollOption span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pollOption strong {
+  white-space: nowrap;
+}
+
+.decisionButton {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--color-text);
+  border-radius: var(--radius-pill);
+  padding: 0 13px;
+  background: var(--color-text);
+  color: var(--color-surface);
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.decisionButton svg {
+  color: var(--color-surface);
+}
+
+.decisionButton strong {
+  display: inline-grid;
+  min-width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.decisionButton span {
+  color: var(--color-surface);
+}
+
+.inlineLink {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 38px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 0 13px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.menuList {
+  display: grid;
+  gap: 14px;
+}
+
+.menuGroup {
+  display: grid;
+  gap: 14px;
+}
+
+.menuTitle {
+  justify-content: start;
+}
+
+.menuItems {
+  display: grid;
+  gap: 10px;
+}
+
+.menuItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+  border-radius: 14px;
+  padding: 14px;
+  background: var(--color-surface);
+}
+
+.menuItem h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.menuItem p {
+  margin: 5px 0 0;
+  color: var(--color-muted);
+  line-height: 1.45;
+}
+
+.menuItem span {
+  border-radius: var(--radius-pill);
+  padding: 6px 10px;
+  background: rgba(240, 51, 47, 0.08);
+  color: var(--color-red-card);
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.timeline {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timelineItem {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  padding: 18px;
+  background: var(--color-surface);
+  box-shadow: 0 14px 34px rgba(18, 18, 18, 0.06);
+}
+
+.timeBlock {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+}
+
+.timeBlock span {
+  color: var(--color-green-card);
+  font-family: var(--font-accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.timeBlock strong {
+  font-size: 1.1rem;
+}
+
+.timelineContent {
+  display: grid;
+  gap: 8px;
+}
+
+.timelineContent p {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.45;
+}
+
+.location {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dialogBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(18, 18, 18, 0.28);
+}
+
+.dialogPopup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 61;
+  display: grid;
+  width: min(calc(100vw - 32px), 520px);
+  max-height: calc(100vh - 48px);
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  box-shadow: 0 28px 80px rgba(18, 18, 18, 0.22);
+}
+
+.dialogHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  padding: 18px 20px 16px;
+}
+
+.dialogTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 3vw, 1.4rem);
+  font-weight: 560;
+  line-height: 1.1;
+}
+
+.dialogClose {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.dialogBody {
+  display: grid;
+  max-height: min(60vh, 520px);
+  overflow: auto;
+  padding: 4px 20px 20px;
+}
+
+.dialogFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid var(--color-border);
+  padding: 14px 20px;
+  background: var(--color-surface);
+}
+
+.decisionRecord {
+  display: grid;
+  gap: 10px;
+  border-bottom: 1px solid var(--color-border);
+  padding: 16px 0;
+}
+
+.decisionRecord:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.decisionRecord h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 560;
+  line-height: 1.15;
+}
+
+.decisionRecord > p {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.45;
+}
+
+.finalDecision {
+  display: grid;
+  gap: 4px;
+}
+
+.finalDecision span {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.finalDecision strong {
+  font-size: 1.02rem;
+}
+
+@media (max-width: 760px) {
+  .page {
+    gap: 22px;
+    padding-top: 18px;
+    padding-bottom: calc(var(--space-section) + 92px);
+  }
+
+  .backLink {
+    min-height: 40px;
+    padding: 0 13px;
+    font-size: 0.84rem;
+  }
+
+  .tabs {
+    position: fixed;
+    inset-inline: 12px;
+    top: auto;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    z-index: 50;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: auto;
+    max-width: none;
+    border-radius: 22px;
+    padding: 6px;
+    background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+    box-shadow: 0 18px 52px rgba(18, 18, 18, 0.14);
+    backdrop-filter: blur(14px);
+  }
+
+  .tab {
+    min-width: 0;
+    min-height: 52px;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 6px;
+    font-size: 0.72rem;
+    line-height: 1.05;
+    white-space: normal;
+  }
+
+  .tabIcon {
+    width: 17px;
+    height: 17px;
+  }
+
+  .panel {
+    min-height: 0;
+  }
+
+  .sectionHeader {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .sectionActions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .outfitGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .recordCard,
+  .menuGroup,
+  .timelineItem {
+    padding: 16px;
+  }
+
+  .menuItem {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .menuItem span {
+    width: fit-content;
+  }
+
+  .timelineItem {
+    grid-template-columns: 1fr;
+  }
+
+  .timeBlock {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .decisionButton {
+    width: fit-content;
+  }
+}

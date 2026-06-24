@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" role="img" aria-labelledby="title">
+  <title id="title">Locked photo stack illustration</title>
+  <rect x="54" y="50" width="86" height="72" rx="6" fill="#fffefa" stroke="#171717" stroke-width="6" transform="rotate(-7 97 86)"/>
+  <rect x="96" y="62" width="90" height="76" rx="6" fill="#fffefa" stroke="#171717" stroke-width="6" transform="rotate(8 141 100)"/>
+  <path d="M112 122l24-26 18 20 10-10 22 28" fill="none" stroke="#171717" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="148" cy="86" r="8" fill="#171717"/>
+  <rect x="154" y="116" width="44" height="44" rx="12" fill="#fffefa" stroke="#171717" stroke-width="6"/>
+  <path d="M164 116v-10c0-8 5-14 12-14s12 6 12 14v10" fill="none" stroke="#171717" stroke-width="6" stroke-linecap="round"/>
+</svg>

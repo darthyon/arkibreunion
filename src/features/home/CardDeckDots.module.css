@@ -1,0 +1,23 @@
+.dots {
+  display: flex;
+  gap: 9px;
+  justify-content: center;
+  min-height: 24px;
+}
+
+.dots button {
+  width: 9px;
+  height: 9px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  padding: 0;
+  background: rgba(23, 23, 23, 0.22);
+  transition:
+    width 180ms ease,
+    background 180ms ease;
+}
+
+.dots button[aria-current="true"] {
+  width: 26px;
+  background: var(--color-text);
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" role="img" aria-labelledby="title">
+  <title id="title">Gift box illustration</title>
+  <rect x="55" y="74" width="130" height="82" rx="8" fill="#fffefa" stroke="#171717" stroke-width="6"/>
+  <path d="M50 74h140v28H50zM120 74v82" fill="none" stroke="#171717" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M120 72c-22-34-56-26-46 0M120 72c22-34 56-26 46 0" fill="none" stroke="#171717" stroke-width="8" stroke-linecap="round"/>
+  <path d="M173 110l28 12-10 28-28-12 10-28z" fill="#fffefa" stroke="#171717" stroke-width="5"/>
+  <path d="M185 128h1" stroke="#171717" stroke-width="7" stroke-linecap="round"/>
+</svg>

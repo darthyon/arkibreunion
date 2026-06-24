@@ -1,0 +1,17 @@
+.header {
+  margin-bottom: 18px;
+}
+
+.header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.6rem);
+  line-height: 1.05;
+}
+
+.header p {
+  max-width: 62ch;
+  margin: 10px 0 0;
+  color: var(--color-muted);
+  line-height: 1.55;
+}

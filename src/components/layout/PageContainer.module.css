@@ -1,0 +1,14 @@
+.page,
+.readable,
+.narrow {
+  width: min(100% - calc(var(--space-page-x) * 2), var(--container-page));
+  margin: 0 auto;
+}
+
+.readable {
+  max-width: var(--container-readable);
+}
+
+.narrow {
+  max-width: var(--container-narrow);
+}

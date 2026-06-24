@@ -1,0 +1,5 @@
+.page {
+  display: grid;
+  gap: clamp(20px, 3vw, 34px);
+  padding-bottom: var(--space-section);
+}

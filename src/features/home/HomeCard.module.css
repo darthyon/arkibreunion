@@ -1,0 +1,300 @@
+.card {
+  position: absolute;
+  left: 50%;
+  top: 18px;
+  display: flex;
+  width: 288px;
+  height: 428px;
+  margin-left: -144px;
+  flex-direction: column;
+  gap: 13px;
+  overflow: hidden;
+  border: 1px solid rgba(23, 23, 23, 0.12);
+  border-radius: 24px;
+  padding: 19px 18px;
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+.selectButton {
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  text-align: center;
+}
+
+.number,
+.badge {
+  font-family: var(--font-accent);
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.badge {
+  width: fit-content;
+  border-radius: var(--radius-pill);
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.card h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.48rem;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.card p {
+  margin: 0;
+  max-width: 23ch;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.illustrationWrap {
+  display: grid;
+  min-height: 130px;
+  flex: 1;
+  place-items: center;
+}
+
+.illustrationWrap img {
+  width: min(74%, 160px);
+  height: auto;
+  max-height: 156px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 0 rgba(23, 23, 23, 0.1));
+}
+
+.summaryRows {
+  display: grid;
+  margin-top: 2px;
+}
+
+.summaryRow {
+  display: grid;
+  grid-template-columns: 19px 54px 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 35px;
+  font-size: 0.74rem;
+}
+
+.summaryRow svg {
+  color: var(--color-text);
+}
+
+.summaryRow span {
+  color: var(--color-muted);
+}
+
+.summaryRow strong {
+  min-width: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cta {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 0;
+  border-radius: 12px;
+  padding: 0 15px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 3px 8px rgba(20, 18, 12, 0.12);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.countdown {
+  display: grid;
+  gap: 3px;
+  min-height: 62px;
+  border: 1px solid rgba(23, 23, 23, 0.1);
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 3px 8px rgba(20, 18, 12, 0.08);
+}
+
+.countdown span {
+  color: var(--color-muted);
+  font-family: var(--font-accent);
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.countdown strong {
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 560;
+  line-height: 1;
+}
+
+.blue {
+  background: var(--color-blue-card);
+  color: var(--color-surface-warm);
+}
+
+.red {
+  background: var(--color-red-card);
+  color: var(--color-surface-warm);
+}
+
+.green {
+  background: var(--color-green-card);
+  color: var(--color-surface-warm);
+}
+
+.yellow {
+  background: var(--color-yellow-card);
+  color: var(--color-text);
+}
+
+.summary {
+  background: var(--color-summary-card);
+  color: var(--color-text);
+}
+
+.summary p {
+  max-width: 28ch;
+  line-height: 1.42;
+}
+
+.summary .badge {
+  background: rgba(20, 99, 232, 0.09);
+  color: var(--color-blue-card);
+}
+
+.summary .cta {
+  background: var(--color-text);
+  color: var(--color-surface-warm);
+}
+
+.near .countdown,
+.far .countdown {
+  opacity: 0.78;
+  transform: scale(0.96);
+}
+
+.active {
+  cursor: grab;
+}
+
+.active:active {
+  cursor: grabbing;
+}
+
+.near .cta,
+.far .cta {
+  opacity: 0.82;
+  transform: scale(0.96);
+}
+
+.far .selectButton {
+  gap: 7px;
+}
+
+.far p {
+  opacity: 0.82;
+}
+
+.far .cta {
+  opacity: 0.64;
+}
+
+.far .illustrationWrap img {
+  width: min(66%, 144px);
+}
+
+.near.summary .summaryRows,
+.far.summary .summaryRows {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.near.summary .illustrationWrap,
+.far.summary .illustrationWrap {
+  display: none;
+}
+
+@media (max-width: 1110px) {
+  .card {
+    width: 260px;
+    height: 414px;
+    margin-left: -130px;
+  }
+
+  .card h2 {
+    font-size: 1.36rem;
+  }
+
+  .summaryRow {
+    grid-template-columns: 18px 50px 1fr;
+    min-height: 33px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .card {
+    top: 14px;
+    width: clamp(252px, 72vw, 296px);
+    height: 430px;
+    margin-left: calc(clamp(252px, 72vw, 296px) / -2);
+    padding: 18px 17px;
+    gap: 10px;
+  }
+
+  .card h2 {
+    font-size: clamp(1.26rem, 5vw, 1.5rem);
+  }
+
+  .card p {
+    font-size: 0.78rem;
+    line-height: 1.42;
+  }
+
+  .illustrationWrap {
+    min-height: 118px;
+  }
+
+  .summaryRow {
+    grid-template-columns: 18px 48px 1fr;
+    min-height: 29px;
+    gap: 7px;
+    font-size: 0.66rem;
+  }
+
+  .summaryRow strong {
+    font-size: 0.66rem;
+  }
+
+  .cta {
+    min-height: 42px;
+    font-size: 0.78rem;
+  }
+
+  .countdown {
+    min-height: 58px;
+    padding: 9px 11px;
+  }
+
+  .countdown strong {
+    font-size: 1.06rem;
+  }
+
+}

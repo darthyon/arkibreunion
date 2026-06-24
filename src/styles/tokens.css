@@ -1,0 +1,33 @@
+:root {
+  --color-bg: #fbfaf7;
+  --color-surface: #ffffff;
+  --color-surface-warm: #fffdf7;
+  --color-text: #171717;
+  --color-muted: #62646b;
+  --color-subtle: #8c8f96;
+  --color-border: #e7e3dc;
+  --color-blue-card: #1463e8;
+  --color-red-card: #f0332f;
+  --color-green-card: #0f6b3d;
+  --color-yellow-card: #f4c51f;
+  --color-summary-card: #fffefa;
+  --color-danger: #d92d20;
+  --color-success: #157347;
+  --color-warning: #b7791f;
+
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-accent: var(--font-geist-mono), "SFMono-Regular", Consolas, monospace;
+
+  --container-page: 1180px;
+  --container-readable: 920px;
+  --container-narrow: 640px;
+  --space-page-x: clamp(16px, 4vw, 48px);
+  --space-section: clamp(32px, 6vw, 72px);
+  --space-card: 24px;
+  --radius-card: 28px;
+  --radius-panel: 20px;
+  --radius-pill: 999px;
+  --shadow-soft: 0 18px 45px rgba(18, 18, 18, 0.08);
+  --shadow-card: 0 20px 55px rgba(18, 18, 18, 0.12);
+}

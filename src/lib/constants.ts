@@ -1,0 +1,1 @@
+export const DEFAULT_ACTIVE_HOME_CARD_INDEX = 2;
