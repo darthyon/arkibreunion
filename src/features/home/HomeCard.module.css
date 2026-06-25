@@ -4,7 +4,7 @@
   top: 18px;
   display: flex;
   width: 288px;
-  height: 428px;
+  height: 412px;
   margin-left: -144px;
   flex-direction: column;
   gap: 13px;
@@ -119,6 +119,7 @@
 .countdown {
   display: grid;
   gap: 3px;
+  margin-top: auto;
   min-height: 62px;
   border: 1px solid rgba(23, 23, 23, 0.1);
   border-radius: 14px;
@@ -234,7 +235,7 @@
 @media (max-width: 1110px) {
   .card {
     width: 260px;
-    height: 414px;
+    height: 400px;
     margin-left: -130px;
   }
 
@@ -253,7 +254,7 @@
   .card {
     top: 14px;
     width: clamp(252px, 72vw, 296px);
-    height: 430px;
+    height: 414px;
     margin-left: calc(clamp(252px, 72vw, 296px) / -2);
     padding: 18px 17px;
     gap: 10px;

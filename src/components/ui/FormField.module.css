@@ -20,3 +20,8 @@
   color: var(--color-muted);
   font-weight: 400;
 }
+
+.field .error {
+  color: var(--color-danger);
+  font-weight: 600;
+}

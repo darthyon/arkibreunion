@@ -5,5 +5,8 @@ export type ReunionTask = {
   title: string;
   description?: string;
   ownerName?: string;
+  picNames?: string[];
   status: TaskStatus;
+  createdAt: string;
+  updatedAt: string;
 };

@@ -135,9 +135,20 @@ Use horizontal status tabs with stacked sections.
 
 Recommended MVP behaviour:
 
-    Status tabs anchor-scroll to stacked sections.
+    Status tabs filter a single stacked list. Selecting a tab shows only that
+    status's task cards.
 
-This is simpler and more reliable than drag-and-drop or tiny mobile columns.
+This mirrors how Linear and Jira handle a Kanban board on mobile: one status in
+view at a time, switched via the tab row. It is simpler and more reliable than
+anchor-scroll, drag-and-drop, or tiny mobile columns.
+
+## Design References
+
+    img references/img-concept 4.png        (desktop 4-column board)
+    img references/img-mobile-concept 4.png  (mobile tab-filter list)
+
+The header filter / "Tapis / Lihat" dropdown shown in the desktop concept is out
+of scope for MVP. The board already groups by status.
 
 # 6. Page Header Copy
 
@@ -517,7 +528,7 @@ Use:
 - status chips
 - simple column headers
 - generous spacing
-- minimal illustration, optional
+- text-only task cards (no per-card illustration for MVP)
 
 Avoid:
 
@@ -585,9 +596,10 @@ Status chip must remain readable on mobile.
 
 ## Status Tabs
 
-- Tabs should anchor-scroll to sections
+- On mobile, tabs filter the list to a single status (one status in view)
+- On desktop, all four status columns are shown; tabs are not needed
 - Active state updates on click
-- Scroll spy is nice to have, not required for MVP
+- No anchor-scroll or scroll spy for MVP
 
 # 21. Accessibility Requirements
 
@@ -636,6 +648,8 @@ Do not build for MVP:
 - link to Menu Makan
 - link to Tukar Hadiah
 - complex committee roles
+- per-card illustrations / icons (mobile concept art)
+- header filter / view dropdown ("Tapis / Lihat")
 
 # 24. Acceptance Criteria
 
