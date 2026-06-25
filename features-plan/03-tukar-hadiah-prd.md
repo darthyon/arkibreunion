@@ -15,6 +15,16 @@ No full account system is required for MVP.
 
 The feature should feel simple, private, slightly suspenseful, and easy enough for non-technical users.
 
+## Implementation Priority
+
+Build Tukar Hadiah immediately after View Plan.
+
+Reason:
+
+- It is the highest-value participant feature after the plan page.
+- It includes the most important privacy rule in the MVP: participants must only see their own assignment and assigned recipient wishlist.
+- Its draw logic should be validated before moving on to the simpler task-board workflow.
+
 ## 2. Feature Goal
 
 Tukar Hadiah should help users quickly answer:

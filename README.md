@@ -16,6 +16,12 @@ A clean, bold, slightly official reunion archive.
 
 Read `DESIGN.md` and the relevant file in `features-plan/` before implementing a feature.
 
+Current implementation priority after View Plan:
+
+1. Tukar Hadiah
+2. Gerak Kerja
+3. Admin/Edit Mode
+
 ## Development
 
 ```bash

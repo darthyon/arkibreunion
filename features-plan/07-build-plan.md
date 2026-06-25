@@ -13,11 +13,15 @@ Core MVP features:
 3. Homepage / Card Deck
 4. Placeholder pages
 5. View Plan
-6. Gerak Kerja
-7. Tukar Hadiah
+6. Tukar Hadiah
+7. Gerak Kerja
 8. Admin Mode UI using mock admin state
 9. Real Admin Login / Auth
 10. Permission hardening
+
+Priority note:
+
+After View Plan, build Tukar Hadiah before Gerak Kerja. Tukar Hadiah carries the highest participant value and the most privacy-sensitive logic, so it should be proven earlier while the app is still mock-data first.
 
 Album Rahsia and Previous Reunion detail pages are placeholders only for MVP.
 
@@ -560,21 +564,26 @@ Build the read-only View Plan page first, then add mock admin controls.
 ### Sections
 
 ```text
-Keputusan
+Program
 Outfit
 Menu Makan
-Program
+Accommodation
 ```
+
+Important decisions are not their own tab. Section-level decision records open from the relevant section through `View Keputusan`.
 
 ### Build Read-Only First
 
 - page header
 - back link
-- sticky section tabs
-- Keputusan cards
+- controlled tabs that switch content in place
+- mobile fixed bottom tab bar
+- Program timeline/list
 - Outfit day cards
 - Menu Makan sections
-- Program timeline/list
+- Accommodation details
+- section-level `View Keputusan` actions
+- decision modal content
 - PIC display
 - guest empty states
 
@@ -614,14 +623,102 @@ Preview
 
 - Guest view is clean and read-only
 - Admin controls only appear when mock `isAdmin` is true
-- Tabs jump to correct sections
-- Mobile uses sticky horizontal tabs
+- Tabs switch content without anchor jumps
+- Mobile uses a fixed bottom tab bar
 - Add/edit/delete works against local/mock state
 - Empty states differ between guest and admin
 
 ---
 
-## 18. Build Phase 6: Gerak Kerja
+## 18. Build Phase 6: Tukar Hadiah
+
+### Goal
+
+Build gift exchange logic and participant flow.
+
+### Route
+
+```text
+/tukar-hadiah
+```
+
+### Build Order
+
+#### 6.1 Setup Display
+
+- budget
+- instructions
+- PIC
+- draw status
+
+#### 6.2 Participant Access
+
+- name input
+- PIN input
+- login to participant view using mock participant data
+
+#### 6.3 Wishlist
+
+- participant can save own wishlist
+- wishlist stored in local/mock state first
+
+#### 6.4 Assignment View
+
+Before draw:
+
+```text
+Cabutan belum dibuat.
+Wishlist boleh isi dulu. Suspense simpan kemudian.
+```
+
+After draw:
+
+```text
+Anda beli hadiah untuk
+[Recipient Name]
+```
+
+#### 6.5 Admin Management
+
+Using mock admin state:
+
+- edit setup
+- add participant
+- edit participant
+- delete participant
+- run draw
+- re-run draw with warning
+- view all assignments
+
+### Draw Rules
+
+- minimum 3 participants
+- no self-assignment
+- one recipient per participant
+- one giver per participant
+- no exclusions for MVP
+
+### Privacy Rule
+
+Even before real auth, structure the code so participant view only receives the participant’s own assignment.
+
+Do not casually pass full assignment list into participant components.
+
+### Acceptance Criteria
+
+- Participant can enter name + PIN
+- Participant can save wishlist
+- Participant sees no assignment before draw
+- Admin can run draw
+- Draw prevents self-assignment
+- Participant sees assigned recipient after draw
+- Participant sees assigned recipient wishlist
+- Participant cannot see all assignments
+- Admin can view all assignments
+
+---
+
+## 19. Build Phase 7: Gerak Kerja
 
 ### Goal
 
@@ -668,94 +765,6 @@ Admin can:
 - Admin can manage tasks using dialogs
 - Status dropdown moves tasks between groups
 - Guest cannot see edit controls
-
----
-
-## 19. Build Phase 7: Tukar Hadiah
-
-### Goal
-
-Build gift exchange logic and participant flow.
-
-### Route
-
-```text
-/tukar-hadiah
-```
-
-### Build Order
-
-#### 7.1 Setup Display
-
-- budget
-- instructions
-- PIC
-- draw status
-
-#### 7.2 Participant Access
-
-- name input
-- PIN input
-- login to participant view using mock participant data
-
-#### 7.3 Wishlist
-
-- participant can save own wishlist
-- wishlist stored in local/mock state first
-
-#### 7.4 Assignment View
-
-Before draw:
-
-```text
-Cabutan belum dibuat.
-Wishlist boleh isi dulu. Suspense simpan kemudian.
-```
-
-After draw:
-
-```text
-Anda beli hadiah untuk
-[Recipient Name]
-```
-
-#### 7.5 Admin Management
-
-Using mock admin state:
-
-- edit setup
-- add participant
-- edit participant
-- delete participant
-- run draw
-- re-run draw with warning
-- view all assignments
-
-### Draw Rules
-
-- minimum 3 participants
-- no self-assignment
-- one recipient per participant
-- one giver per participant
-- no exclusions for MVP
-
-### Privacy Rule
-
-Even before real auth, structure the code so participant view only receives the participant’s own assignment.
-
-Do not casually pass full assignment list into participant components.
-
-### Acceptance Criteria
-
-- Participant can enter name + PIN
-- Participant can save wishlist
-- Participant sees no assignment before draw
-- Admin can run draw
-- Draw prevents self-assignment
-- Participant sees assigned recipient after draw
-- Participant sees assigned recipient wishlist
-- Participant cannot see all assignments
-- Admin can view all assignments
 
 ---
 
@@ -966,9 +975,9 @@ The MVP is complete when:
 
 - Homepage loads with final card deck
 - View Plan works in guest and admin modes
-- Gerak Kerja works in guest and admin modes
 - Tukar Hadiah participant flow works
 - Tukar Hadiah draw logic works
+- Gerak Kerja works in guest and admin modes
 - Album Rahsia opens placeholder
 - Previous Reunion cards open placeholders
 - Generic 404 uses approved placeholder copy

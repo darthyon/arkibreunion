@@ -12,6 +12,15 @@ Core purpose:
 
     Siapa buat apa, apa dah siap, dan apa yang sangkut.
 
+## Implementation Priority
+
+Build Gerak Kerja after Tukar Hadiah.
+
+Reason:
+
+- Gerak Kerja is still part of MVP, but its task-board rules are simpler than Tukar Hadiah's privacy and draw logic.
+- Building it after Tukar Hadiah lets shared admin/edit patterns reuse the participant-safe data boundaries established by the gift exchange flow.
+
 ## 2. Feature Goal
 
 Gerak Kerja should help users quickly answer:

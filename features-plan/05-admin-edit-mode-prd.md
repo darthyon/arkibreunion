@@ -23,6 +23,14 @@ Admin Mode applies to:
 - Previous Reunion cards
 - Album Rahsia Coming Soon state, if needed
 
+Implementation order after View Plan:
+
+1. Tukar Hadiah admin controls
+2. Gerak Kerja admin controls
+3. Shared admin login/auth hardening
+
+Tukar Hadiah comes first because it has participant privacy rules, draw controls, PIN visibility, and full-assignment admin views that need to be shaped before simpler task editing.
+
 The experience should feel lightweight, obvious, and safe.
 
 ## 2. Feature Goal
