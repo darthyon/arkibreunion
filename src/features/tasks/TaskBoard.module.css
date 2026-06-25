@@ -2,3 +2,52 @@
   display: grid;
   gap: var(--space-card);
 }
+
+.tabRow {
+  display: none;
+}
+
+.columns {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(280px, 1fr);
+  gap: 16px;
+  align-items: start;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-padding-inline: 4px;
+  scrollbar-width: thin;
+}
+
+.columns::-webkit-scrollbar {
+  height: 8px;
+}
+
+.columns::-webkit-scrollbar-thumb {
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+}
+
+.columnSlot {
+  display: block;
+  min-width: 0;
+}
+
+@media (max-width: 820px) {
+  .tabRow {
+    display: block;
+  }
+
+  .columns {
+    display: block;
+    padding-bottom: 88px;
+  }
+
+  .columnSlot {
+    display: none;
+  }
+
+  .columnSlot[data-active="true"] {
+    display: block;
+  }
+}

@@ -1,0 +1,103 @@
+.column {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  padding: 16px;
+  background: var(--color-surface);
+}
+
+.header {
+  display: grid;
+  gap: 2px;
+}
+
+.headingRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.heading {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.count {
+  display: inline-flex;
+  min-width: 22px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  padding: 0 7px;
+  background: color-mix(in srgb, var(--color-green-card) 12%, transparent);
+  color: var(--color-green-card);
+  font-family: var(--font-accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.helper {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+}
+
+.cards {
+  display: grid;
+  gap: 12px;
+}
+
+.empty {
+  margin: 0;
+  border: 1px dashed var(--color-border);
+  border-radius: 14px;
+  padding: 18px 14px;
+  color: var(--color-subtle);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.addButton {
+  display: inline-flex;
+  min-height: 40px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px dashed var(--color-border);
+  border-radius: 14px;
+  padding: 0 12px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    background 160ms ease;
+}
+
+.addButton:hover {
+  border-color: var(--color-green-card);
+  color: var(--color-green-card);
+  background: color-mix(in srgb, var(--color-green-card) 6%, transparent);
+}
+
+@media (max-width: 820px) {
+  .column {
+    border: none;
+    padding: 0;
+    background: transparent;
+  }
+
+  .addButton {
+    display: none;
+  }
+}

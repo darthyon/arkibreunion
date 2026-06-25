@@ -1,4 +1,134 @@
 .card {
   display: grid;
+  gap: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 14px;
+  background: var(--color-surface);
+  box-shadow: 0 6px 18px rgba(18, 18, 18, 0.04);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.chip {
+  display: inline-flex;
+  flex: 0 0 auto;
+  min-height: 28px;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 0 10px;
+  font-family: var(--font-accent);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+button.chip {
+  cursor: pointer;
+  transition: filter 140ms ease;
+}
+
+button.chip:hover {
+  filter: brightness(0.96);
+}
+
+button.chip:focus-visible {
+  outline: 3px solid rgba(15, 107, 61, 0.24);
+  outline-offset: 2px;
+}
+
+.tone_neutral {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-muted);
+}
+
+.tone_green {
+  border-color: color-mix(in srgb, var(--color-green-card) 32%, var(--color-border));
+  background: color-mix(in srgb, var(--color-green-card) 10%, transparent);
+  color: var(--color-green-card);
+}
+
+.tone_amber {
+  border-color: color-mix(in srgb, var(--color-warning) 34%, var(--color-border));
+  background: color-mix(in srgb, var(--color-warning) 12%, transparent);
+  color: var(--color-warning);
+}
+
+.tone_muted {
+  border-color: var(--color-border);
+  background: #f2f1ee;
+  color: var(--color-subtle);
+}
+
+.metaRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.86rem;
+}
+
+.metaLabel {
+  color: var(--color-subtle);
+  font-family: var(--font-accent);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.metaValue {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.description {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.picRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+}
+
+.cardFooter {
+  display: grid;
+  gap: 10px;
+  margin-top: 2px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+}
+
+.date {
+  color: var(--color-subtle);
+  font-size: 0.76rem;
+}
+
+.adminActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
 }
