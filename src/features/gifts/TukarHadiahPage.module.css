@@ -1,4 +1,584 @@
 .page {
   display: grid;
-  gap: var(--space-card);
+  gap: 24px;
+  padding: 30px 0 var(--space-section);
+}
+
+.backLink {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 0 16px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 8px 22px rgba(18, 18, 18, 0.05);
+}
+
+.toolbarCopy {
+  padding: 0 10px;
+  color: var(--color-muted);
+  font-family: var(--font-accent);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.factStrip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.factItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  min-height: 112px;
+  padding: 22px;
+  background: var(--color-surface);
+}
+
+.factItem + .factItem {
+  border-left: 1px solid var(--color-border);
+}
+
+.factItem svg {
+  color: var(--color-red-card);
+}
+
+.factItem div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.factItem span,
+.factItem small {
+  color: var(--color-muted);
+  line-height: 1.35;
+}
+
+.factItem span {
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.factItem strong {
+  overflow: hidden;
+  color: var(--color-text);
+  font-size: clamp(1.05rem, 1.7vw, 1.28rem);
+  font-weight: 600;
+  line-height: 1.16;
+  text-overflow: ellipsis;
+}
+
+.factItem small {
+  font-size: 0.86rem;
+}
+
+.authStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-radius: 18px;
+  padding: 13px 14px 13px 16px;
+  background: var(--color-text);
+  color: var(--color-surface);
+  box-shadow: 0 18px 38px rgba(18, 18, 18, 0.16);
+}
+
+.authStripLoggedIn {
+  background: var(--color-text);
+  box-shadow: 0 18px 38px rgba(18, 18, 18, 0.16);
+}
+
+.authCopy {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+
+.authCopy svg {
+  color: var(--color-surface);
+}
+
+.authStrip p {
+  margin: 0;
+  color: var(--color-surface);
+  font-size: 0.94rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.authStrip button {
+  flex: 0 0 auto;
+  border-color: var(--color-surface);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.adminStatGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.adminStatGrid div {
+  display: grid;
+  min-height: 122px;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  border: 1px solid rgba(240, 51, 47, 0.12);
+  border-radius: 18px;
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(240, 51, 47, 0.07), rgba(240, 51, 47, 0.025));
+  text-align: center;
+}
+
+.adminStatGrid svg {
+  color: var(--color-red-card);
+}
+
+.adminStatGrid strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 560;
+  line-height: 1;
+}
+
+.adminStatGrid span {
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.panel,
+.adminPanel,
+.adminSection {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  box-shadow: 0 14px 34px rgba(18, 18, 18, 0.06);
+}
+
+.panel,
+.adminSection {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  min-height: 354px;
+  padding: 20px;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panelHeader svg {
+  color: var(--color-red-card);
+}
+
+.panelHeader h2,
+.adminHeader h2,
+.subsectionHeader h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 560;
+  line-height: 1.12;
+}
+
+.loginForm,
+.wishlistForm,
+.dialogForm {
+  display: grid;
+  gap: 14px;
+}
+
+.wishlistForm textarea,
+.dialogForm textarea {
+  resize: vertical;
+}
+
+.formError {
+  margin: 0;
+  border: 1px solid rgba(217, 45, 32, 0.22);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: rgba(217, 45, 32, 0.06);
+  color: var(--color-danger);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.emptyText,
+.deleteText {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.55;
+}
+
+.emptyState {
+  display: grid;
+  min-height: 246px;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  padding: 28px 18px;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.emptyIcon {
+  display: grid;
+  width: 88px;
+  height: 88px;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 26px;
+  background: #f2f1ee;
+  color: #8f8f8c;
+}
+
+.emptyState h3,
+.emptyState p {
+  margin: 0;
+}
+
+.emptyState h3 {
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.emptyState p {
+  max-width: 34ch;
+  line-height: 1.5;
+}
+
+.assignmentHero {
+  display: grid;
+  min-height: 354px;
+  align-content: center;
+  gap: 18px;
+  border: 1px solid color-mix(in srgb, var(--color-red-card) 24%, var(--color-border));
+  border-radius: var(--radius-card);
+  padding: clamp(22px, 4vw, 30px);
+  background: var(--color-red-card);
+  color: var(--color-surface);
+  box-shadow: 0 22px 44px rgba(240, 51, 47, 0.18);
+}
+
+.assignmentLabel,
+.privacyNote {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.assignmentHero h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 7vw, 4.2rem);
+  font-weight: 560;
+  line-height: 0.95;
+}
+
+.recipientWishlist {
+  display: grid;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.recipientWishlist h3,
+.recipientWishlist p,
+.privacyNote {
+  margin: 0;
+}
+
+.recipientWishlist h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.recipientWishlist p,
+.privacyNote {
+  line-height: 1.5;
+}
+
+.adminPanel {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+}
+
+.adminHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: start;
+}
+
+.adminHeader p,
+.subsectionHeader p {
+  margin: 6px 0 0;
+  color: var(--color-muted);
+  line-height: 1.45;
+}
+
+.kicker {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--color-red-card);
+  font-family: var(--font-accent);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.adminActions,
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.adminAlert {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 10px;
+  border-radius: 16px;
+  padding: 0 16px;
+  background: var(--color-red-card);
+  color: var(--color-surface);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.adminAlert svg {
+  flex: 0 0 auto;
+  color: var(--color-surface);
+}
+
+.adminGridSingle {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.subsectionHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.subsectionHeader > span,
+.adminOnly {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 0 10px;
+  color: var(--color-muted);
+  font-family: var(--font-accent);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.participantList {
+  display: grid;
+  gap: 10px;
+}
+
+.participantCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  padding: 16px;
+  background: var(--color-surface);
+}
+
+.participantCard h3 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.participantCard dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.participantCard dt {
+  color: var(--color-muted);
+  font-family: var(--font-accent);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.participantCard dd {
+  margin: 4px 0 0;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.warningContent {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding-top: 16px;
+}
+
+.warningContent svg {
+  color: var(--color-warning);
+}
+
+.warningContent p {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.55;
+}
+
+.loginDialogIntro p {
+  margin: 14px 0 16px;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.toast {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 70;
+  max-width: min(360px, calc(100vw - 36px));
+  margin: 0;
+  border: 1px solid rgba(21, 115, 71, 0.24);
+  border-radius: 16px;
+  padding: 13px 15px;
+  background: var(--color-surface);
+  color: var(--color-success);
+  font-size: 0.92rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-soft);
+}
+
+@media (max-width: 860px) {
+  .factStrip,
+  .contentGrid,
+  .adminHeader {
+    grid-template-columns: 1fr;
+  }
+
+  .factItem + .factItem {
+    border-top: 1px solid var(--color-border);
+    border-left: 0;
+  }
+
+  .factItem {
+    min-height: auto;
+    padding: 18px;
+  }
+
+  .adminStatGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .adminActions {
+    justify-content: flex-start;
+  }
+
+  .participantCard {
+    grid-template-columns: 1fr;
+  }
+
+  .cardActions {
+    justify-content: flex-start;
+  }
+
+  .authStrip {
+    display: grid;
+  }
+
+  .authStrip button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 620px) {
+  .page {
+    gap: 20px;
+    padding-top: 22px;
+  }
+
+  .factStrip,
+  .panel,
+  .adminPanel,
+  .adminSection {
+    border-radius: 18px;
+  }
+
+  .adminStatGrid,
+  .participantCard dl {
+    grid-template-columns: 1fr;
+  }
+
+  .adminStatGrid div {
+    min-height: auto;
+  }
+
+  .adminActions,
+  .cardActions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .subsectionHeader {
+    display: grid;
+  }
 }

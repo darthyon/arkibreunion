@@ -1,4 +1,4 @@
 export const mockAdmin = {
-  isEnabled: false,
-  isAdmin: false
+  isEnabled: true,
+  isAdmin: true
 };

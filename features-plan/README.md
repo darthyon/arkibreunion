@@ -35,6 +35,16 @@ Read the root-level design file before implementing UI:
 - `06-placeholder-pages-prd.md`
 - `07-build-plan.md`
 
+## Current Build Priority
+
+After Homepage, Placeholder Pages, and View Plan, build:
+
+1. `03-tukar-hadiah-prd.md`
+2. `04-gerak-kerja-prd.md`
+3. `05-admin-edit-mode-prd.md`
+
+Tukar Hadiah comes before Gerak Kerja because it is the higher-value participant flow and includes privacy-sensitive assignment logic that should be proven before the simpler task board.
+
 ## Build Rule
 
 Before implementation, read:
