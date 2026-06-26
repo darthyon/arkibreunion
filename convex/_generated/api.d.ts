@@ -9,10 +9,18 @@
  */
 
 import type * as admin from "../admin.js";
+import type * as archive from "../archive.js";
 import type * as auth from "../auth.js";
+import type * as event from "../event.js";
+import type * as giftExchange from "../giftExchange.js";
 import type * as http from "../http.js";
+import type * as lib_auth from "../lib/auth.js";
 import type * as lib_pin from "../lib/pin.js";
 import type * as participants from "../participants.js";
+import type * as seed from "../seed.js";
+import type * as seedData from "../seedData.js";
+import type * as tasks from "../tasks.js";
+import type * as viewPlan from "../viewPlan.js";
 
 import type {
   ApiFromModules,
@@ -22,10 +30,18 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   admin: typeof admin;
+  archive: typeof archive;
   auth: typeof auth;
+  event: typeof event;
+  giftExchange: typeof giftExchange;
   http: typeof http;
+  "lib/auth": typeof lib_auth;
   "lib/pin": typeof lib_pin;
   participants: typeof participants;
+  seed: typeof seed;
+  seedData: typeof seedData;
+  tasks: typeof tasks;
+  viewPlan: typeof viewPlan;
 }>;
 
 /**

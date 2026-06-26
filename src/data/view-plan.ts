@@ -11,11 +11,11 @@ export const planDecisions: PlanDecision[] = [
     id: "decision-accommodation",
     linkedTo: "accommodation",
     title: "Penginapan",
-    finalDecision: "A'Famosa Resort, Melaka",
+    finalDecision: "Villa Sajuri",
     type: "text",
     source: "Group discussion",
     note: "Dipilih sebab senang untuk 3 hari 2 malam.",
-    picNames: ["Aina", "Mira"]
+    picNames: ["Yan", "Tien"]
   },
   {
     id: "decision-outfit-day-1",
@@ -30,7 +30,7 @@ export const planDecisions: PlanDecision[] = [
       { id: "earth-tone", label: "Earth Tone", voteCount: 11 },
       { id: "free-style", label: "Ikut suka hati", voteCount: 5 }
     ],
-    picNames: ["Aina"]
+    picNames: ["Tien"]
   },
   {
     id: "decision-menu",
@@ -52,14 +52,14 @@ export const outfitPlans: OutfitPlan[] = [
     description: "Clean, casual, dan tidak terlalu cosplay pengawas.",
     imageReferenceUrl: "https://www.pinterest.com/search/pins/?q=white%20denim%20outfit",
     decisionId: "decision-outfit-day-1",
-    picNames: ["Aina", "Mira"]
+    picNames: ["Tien"]
   },
   {
     id: "outfit-day-2",
     dayNumber: 2,
     themeName: "Earth Tone",
     description: "Warna tanah, bukan maksudnya datang berdebu.",
-    picNames: ["Sarah"]
+    picNames: ["Jeny"]
   },
   {
     id: "outfit-day-3",
@@ -77,16 +77,16 @@ export const menuSections: MenuSection[] = [
     decisionId: "decision-menu",
     items: [
       {
-        id: "nasi-arab",
-        name: "Nasi Arab",
-        description: "Fragrant rice, ayam bakar, acar.",
-        assignedPerson: "Aina"
+        id: "spaghetti",
+        name: "Spaghetti",
+        description: "Order, bukan masak. Cukup untuk satu villa.",
+        assignedPerson: "Paten"
       },
       {
-        id: "mee-goreng",
-        name: "Mee Goreng",
-        description: "Pilihan selamat untuk yang datang lapar betul.",
-        assignedPerson: "Haziq"
+        id: "satay",
+        name: "Satay",
+        description: "Datang dengan kuah kacang, bukan alasan.",
+        assignedPerson: "Paten"
       }
     ]
   },
@@ -95,16 +95,10 @@ export const menuSections: MenuSection[] = [
     title: "Dessert",
     items: [
       {
-        id: "brownies",
-        name: "Brownies",
-        description: "Chocolate, accepted by the nation.",
-        assignedPerson: "Sarah"
-      },
-      {
-        id: "buah",
-        name: "Buah Potong",
-        description: "Supaya ada unsur bertanggungjawab.",
-        assignedPerson: "Mira"
+        id: "dessert",
+        name: "Dessert",
+        description: "Manis penutup, dirahsiakan sampai hari kejadian.",
+        assignedPerson: "Jeny"
       }
     ]
   },
@@ -123,13 +117,13 @@ export const menuSections: MenuSection[] = [
 ];
 
 export const accommodationPlan: AccommodationPlan = {
-  id: "afamosa-resort",
-  name: "A'Famosa Resort, Melaka",
+  id: "villa-sajuri",
+  name: "Villa Sajuri",
   stayPeriod: "31 Jul - 2 Aug 2026",
-  location: "Melaka",
+  location: "Selangor",
   roomNote: "Bilik ikut keluarga kecil dan geng yang masih percaya boleh tidur lewat.",
   decisionId: "decision-accommodation",
-  picNames: ["Aina", "Mira"]
+  picNames: ["Yan", "Tien"]
 };
 
 export const programItems: ProgramItem[] = [
@@ -140,7 +134,7 @@ export const programItems: ProgramItem[] = [
     title: "Check-in",
     location: "Lobby",
     notes: "Jangan terus hilang lepas ambil kunci.",
-    picNames: ["Mira"]
+    picNames: ["Tien"]
   },
   {
     id: "lunch",
@@ -157,7 +151,7 @@ export const programItems: ProgramItem[] = [
     title: "Aktiviti berkumpulan",
     location: "Outdoor area",
     notes: "Bawa air sendiri. Semangat tidak mencukupi.",
-    picNames: ["Haziq", "Aina"]
+    picNames: ["Paten", "Yan"]
   },
   {
     id: "dinner",
@@ -165,7 +159,7 @@ export const programItems: ProgramItem[] = [
     time: "8:00 PM",
     title: "Dinner rasmi yang tidak terlalu rasmi",
     location: "Dewan utama",
-    picNames: ["Sarah"]
+    picNames: ["Jeny"]
   },
   {
     id: "checkout",

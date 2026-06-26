@@ -1,55 +1,48 @@
 import type { GiftAssignment, GiftExchange, GiftParticipant } from "@/types/gift-exchange";
 
 export const giftExchange: GiftExchange = {
-  id: "gift-asmarian-2026",
-  eventId: "asmarian-2026",
-  picNames: ["Aina", "Mira"],
+  id: "gift-ayam-2026",
+  eventId: "gathering-ayam-2026",
+  picNames: ["Yan", "Tien"],
   budgetText: "RM50-RM80",
   description: "Beli hadiah yang berguna. Jangan beli benda yang membuat orang termenung.",
   isDrawn: false
 };
 
-export const giftParticipants: GiftParticipant[] = [
-  {
-    id: "gift-participant-aina",
-    exchangeId: giftExchange.id,
-    name: "Aina",
-    pin: "4821",
-    wishlist: "Stationery, tote bag, benda warna hijau. Elak mug sebab dah banyak.",
-    hasSubmittedWishlist: true,
-    createdAt: "2026-06-01T08:00:00.000Z",
-    updatedAt: "2026-06-08T08:00:00.000Z"
-  },
-  {
-    id: "gift-participant-mira",
-    exchangeId: giftExchange.id,
-    name: "Mira",
-    pin: "7319",
-    wishlist: "Coffee beans, book tabs, small pouch. Jangan scented candle.",
-    hasSubmittedWishlist: true,
-    createdAt: "2026-06-01T08:05:00.000Z",
-    updatedAt: "2026-06-07T08:05:00.000Z"
-  },
-  {
-    id: "gift-participant-hafiz",
-    exchangeId: giftExchange.id,
-    name: "Hafiz",
-    pin: "2048",
-    wishlist: "",
-    hasSubmittedWishlist: false,
-    createdAt: "2026-06-01T08:10:00.000Z",
-    updatedAt: "2026-06-01T08:10:00.000Z"
-  },
-  {
-    id: "gift-participant-sarah",
-    exchangeId: giftExchange.id,
-    name: "Sarah",
-    pin: "6190",
-    wishlist: "Anything practical for travel. Elak barang fragile.",
-    hasSubmittedWishlist: true,
-    createdAt: "2026-06-01T08:15:00.000Z",
-    updatedAt: "2026-06-04T08:15:00.000Z"
-  }
+const TS = "2026-06-01T08:00:00.000Z";
+
+// Real PINs are NOT stored here. They were seeded into Convex (PBKDF2-hashed)
+// and shared out-of-band. This placeholder keeps the mock shape valid for the
+// soon-to-be-removed local scaffolding; it is not a real credential.
+const PLACEHOLDER_PIN = "0000";
+
+const roster: string[] = [
+  "Aiman",
+  "Azie",
+  "Beat",
+  "Chae",
+  "Dben",
+  "Jeny",
+  "Mun",
+  "Nadiah",
+  "Naimah",
+  "Paten",
+  "Sumaiyyah",
+  "Teen",
+  "Tien",
+  "Yan",
+  "Yon"
 ];
+
+export const giftParticipants: GiftParticipant[] = roster.map((name) => ({
+  id: `gift-participant-${name.toLowerCase()}`,
+  exchangeId: giftExchange.id,
+  name,
+  pin: PLACEHOLDER_PIN,
+  wishlist: "",
+  hasSubmittedWishlist: false,
+  createdAt: TS,
+  updatedAt: TS
+}));
 
 export const giftAssignments: GiftAssignment[] = [];

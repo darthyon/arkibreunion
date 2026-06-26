@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQuery } from "convex/react";
 import { ArrowLeft, Plus } from "lucide-react";
+import { api } from "@convex/_generated/api";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
 import { DialogShell } from "@/components/ui/DialogShell";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { reunionTasks } from "@/data/tasks";
 import { useAdmin } from "@/hooks/useAdmin";
 import { usePreview } from "@/components/PreviewProvider";
 import type { ReunionTask, TaskStatus } from "@/types/tasks";
@@ -16,7 +17,26 @@ import { TaskDialog } from "./dialogs/TaskDialog";
 import styles from "./GerakKerjaPage.module.css";
 
 export function GerakKerjaPage() {
-  const [tasks, setTasks] = useState<ReunionTask[]>(reunionTasks);
+  const taskDocs = useQuery(api.tasks.list);
+  const [tasks, setTasks] = useState<ReunionTask[]>([]);
+
+  // Hydrate local board state from Convex. Admin edits stay local until the
+  // CRUD mutations land in phase 2b.
+  useEffect(() => {
+    if (!taskDocs) return;
+    setTasks(
+      taskDocs.map((doc) => ({
+        id: doc._id,
+        title: doc.title,
+        description: doc.description,
+        ownerName: doc.ownerName,
+        picNames: doc.picNames,
+        status: doc.status,
+        createdAt: doc.createdAt,
+        updatedAt: doc.updatedAt
+      }))
+    );
+  }, [taskDocs]);
   const [activeStatus, setActiveStatus] = useState<TaskStatus>("todo");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ReunionTask>();
@@ -27,6 +47,7 @@ export function GerakKerjaPage() {
   const { isAdmin: isAuthedAdmin } = useAdmin();
   const { isPreviewing } = usePreview();
   const isAdmin = isAuthedAdmin && !isPreviewing;
+  const isLoading = taskDocs === undefined;
   const isBoardEmpty = tasks.length === 0;
 
   function showToast(message: string) {
@@ -108,7 +129,11 @@ export function GerakKerjaPage() {
           title="Gerak Kerja"
         />
 
-        {isBoardEmpty ? (
+        {isLoading ? (
+          <div className={styles.boardEmpty}>
+            <h2>Memuatkan gerak kerja…</h2>
+          </div>
+        ) : isBoardEmpty ? (
           <div className={styles.boardEmpty}>
             <h2>
               {isAdmin

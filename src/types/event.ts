@@ -5,5 +5,5 @@ export type EventSummary = {
   durationText: string;
   location: string;
   participantCount: number;
-  note: string;
+  note?: string;
 };

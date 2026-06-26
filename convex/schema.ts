@@ -26,6 +26,7 @@ export default defineSchema({
       v.literal("blocked"),
       v.literal("done")
     ),
+    createdAt: v.string(),
     updatedAt: v.string()
   }),
 

@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "convex/react";
 import type { PanInfo } from "motion/react";
+import { api } from "@convex/_generated/api";
 import { homeCards } from "@/data/homepage";
 import { useCardDeck } from "@/hooks/useCardDeck";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -80,7 +82,32 @@ function getCardMotion(distance: number, mode: "desktop" | "tablet" | "mobile") 
 }
 
 export function HomeCardDeck() {
-  const deck = useCardDeck({ itemCount: homeCards.length, initialIndex: 2 });
+  // Cards are static structure; the summary card's title + facts derive from the
+  // live event record so admin edits propagate. Static values are the fallback.
+  const event = useQuery(api.event.get);
+  const cards = useMemo(() => {
+    if (!event) return homeCards;
+    return homeCards.map((card) =>
+      card.id === "summary"
+        ? {
+            ...card,
+            title: event.name,
+            summaryRows: [
+              { label: "Tarikh", value: event.dateText, icon: "calendar" as const },
+              { label: "Tempoh", value: event.durationText, icon: "clock" as const },
+              { label: "Lokasi", value: event.location, icon: "location" as const },
+              {
+                label: "Peserta",
+                value: `${event.participantCount} orang berdaftar`,
+                icon: "people" as const
+              }
+            ]
+          }
+        : card
+    );
+  }, [event]);
+
+  const deck = useCardDeck({ itemCount: cards.length, initialIndex: 2 });
   const isMobile = useMediaQuery("(max-width: 767px)");
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1110px)");
   const prefersReducedMotion = useReducedMotion();
@@ -119,7 +146,7 @@ export function HomeCardDeck() {
     >
       <div className={styles.frame}>
         <div className={styles.cards}>
-        {homeCards.map((card, index) => (
+        {cards.map((card, index) => (
             <HomeCard
               key={card.id}
               card={card}
@@ -136,7 +163,7 @@ export function HomeCardDeck() {
         </div>
         <CardDeckControls onPrevious={deck.previous} onNext={deck.next} />
       </div>
-      <CardDeckDots cards={homeCards} activeIndex={deck.activeIndex} onSelect={deck.goTo} />
+      <CardDeckDots cards={cards} activeIndex={deck.activeIndex} onSelect={deck.goTo} />
       <div className={styles.toast} aria-live="polite" aria-atomic="true">
         {toast ? <span>{toast}</span> : null}
       </div>

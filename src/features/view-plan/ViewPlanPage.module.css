@@ -25,6 +25,12 @@
   gap: 22px;
 }
 
+.loading {
+  margin: 0;
+  padding: 40px 0;
+  color: var(--color-muted);
+}
+
 .tabs {
   position: sticky;
   top: 12px;

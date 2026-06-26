@@ -24,7 +24,7 @@ export const homeCards: HomeCardItem[] = [
   {
     id: "summary",
     number: "03",
-    title: "Asmarian Gathering 2026",
+    title: "Gathering Ayam 2026",
     badge: "Fail Semasa",
     description: "Rekod rasmi untuk gathering yang katanya reunion tapi tahunan.",
     cta: "Lihat Ringkasan",
@@ -35,8 +35,8 @@ export const homeCards: HomeCardItem[] = [
     summaryRows: [
       { label: "Tarikh", value: "31 Jul - 2 Aug 2026", icon: "calendar" },
       { label: "Tempoh", value: "3 Hari 2 Malam", icon: "clock" },
-      { label: "Lokasi", value: "A'Famosa Resort, Melaka", icon: "location" },
-      { label: "Peserta", value: "58 orang berdaftar", icon: "people" }
+      { label: "Lokasi", value: "Villa Sajuri", icon: "location" },
+      { label: "Peserta", value: "15 orang berdaftar", icon: "people" }
     ]
   },
   {

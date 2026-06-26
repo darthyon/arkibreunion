@@ -12,11 +12,12 @@ import {
   LogOut,
   WalletCards
 } from "lucide-react";
+import { useQuery } from "convex/react";
+import { api } from "@convex/_generated/api";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
 import { DialogShell } from "@/components/ui/DialogShell";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { currentEvent } from "@/data/event";
 import { giftAssignments, giftExchange, giftParticipants } from "@/data/gift-exchange";
 import { createGiftAssignments } from "@/lib/gift-draw";
 import { useAdmin } from "@/hooks/useAdmin";
@@ -45,6 +46,24 @@ export function TukarHadiahPage() {
   const [isDrawDialogOpen, setIsDrawDialogOpen] = useState(false);
   const [editingParticipant, setEditingParticipant] = useState<GiftParticipant>();
   const [pendingDelete, setPendingDelete] = useState<GiftParticipant>();
+
+  // Public reads from Convex. Participant roster + draw stay on local mock until
+  // the gift mutations (2b) and guest PIN flow (2c) land.
+  const event = useQuery(api.event.get);
+  const exchangeDoc = useQuery(api.giftExchange.get);
+
+  useEffect(() => {
+    if (!exchangeDoc) return;
+    setExchange((current) => ({
+      ...current,
+      id: exchangeDoc._id,
+      picNames: exchangeDoc.picNames,
+      budgetText: exchangeDoc.budgetText,
+      description: exchangeDoc.description,
+      isDrawn: exchangeDoc.isDrawn,
+      drawnAt: exchangeDoc.drawnAt
+    }));
+  }, [exchangeDoc]);
 
   const { isAdmin: isAuthedAdmin } = useAdmin();
   const { isPreviewing } = usePreview();
@@ -199,8 +218,8 @@ export function TukarHadiahPage() {
             <CalendarDays size={25} aria-hidden="true" />
             <div>
               <span>Tempoh</span>
-              <strong>{currentEvent.dateText}</strong>
-              <small>{currentEvent.durationText}</small>
+              <strong>{event?.dateText ?? "—"}</strong>
+              <small>{event?.durationText ?? ""}</small>
             </div>
           </div>
 

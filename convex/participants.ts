@@ -1,16 +1,14 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import {
   action,
   internalMutation,
   internalQuery,
   mutation,
-  query,
-  type QueryCtx,
-  type MutationCtx
+  query
 } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { hashPin, verifyPinHash } from "./lib/pin";
+import { requireAdmin } from "./lib/auth";
 
 const MAX_ATTEMPTS = 5;
 const LOCK_MS = 5 * 60 * 1000; // 5 min cooldown after too many fails
@@ -107,12 +105,6 @@ export const getBySession = query({
 });
 
 // --- Admin: participant + PIN management ------------------------------------
-
-async function requireAdmin(ctx: QueryCtx | MutationCtx) {
-  const userId = await getAuthUserId(ctx);
-  if (userId === null) throw new Error("Not authorised");
-  return userId;
-}
 
 export const list = query({
   args: {},
