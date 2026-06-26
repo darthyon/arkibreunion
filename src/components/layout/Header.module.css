@@ -1,6 +1,6 @@
 .header {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 24px;
   width: min(100%, var(--container-page));
@@ -16,32 +16,12 @@
   letter-spacing: 0;
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.navLink,
-.login,
-.menuButton {
+.login {
   min-height: 44px;
   border: 1px solid transparent;
   border-radius: var(--radius-pill);
   color: var(--color-text);
   background: transparent;
-}
-
-.navLink {
-  display: inline-flex;
-  align-items: center;
-  padding: 0 18px;
-  font-size: 0.84rem;
-}
-
-.navLink:first-child {
-  border-color: var(--color-border);
-  background: rgba(255, 255, 255, 0.58);
 }
 
 .loginWrap {
@@ -60,7 +40,41 @@
   font-size: 0.86rem;
 }
 
-.loginMenu {
+.adminButton {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--color-text);
+  border-radius: var(--radius-pill);
+  background: var(--color-text);
+  color: var(--color-surface);
+  font-size: 0.86rem;
+}
+
+.adminButton svg {
+  color: var(--color-surface);
+}
+
+.adminName {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.previewDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-yellow-card, #f4c542);
+}
+
+.loginMenu,
+.adminMenu {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
@@ -73,6 +87,43 @@
   padding: 8px;
   background: var(--color-surface);
   box-shadow: 0 20px 48px rgba(18, 18, 18, 0.13);
+}
+
+.menuItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  border-radius: 14px;
+  padding: 12px;
+  text-align: left;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+}
+
+.menuItem:hover {
+  background: rgba(18, 18, 18, 0.05);
+}
+
+.menuItem svg {
+  color: var(--color-text);
+}
+
+.menuItem span {
+  display: grid;
+  gap: 3px;
+}
+
+.menuItem strong {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.menuItem small {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
 }
 
 .loginChoice {
@@ -109,18 +160,8 @@
   line-height: 1.35;
 }
 
-.menuButton {
-  display: none;
-  place-items: center;
-  justify-self: end;
-  width: 44px;
-  padding: 0;
-  border-color: var(--color-border);
-}
-
 @media (max-width: 760px) {
   .header {
-    grid-template-columns: 1fr auto;
     padding-block: 14px;
   }
 
@@ -128,12 +169,7 @@
     font-size: 1.18rem;
   }
 
-  .nav,
-  .loginWrap {
-    display: none;
-  }
-
-  .menuButton {
-    display: grid;
+  .adminName {
+    max-width: 96px;
   }
 }

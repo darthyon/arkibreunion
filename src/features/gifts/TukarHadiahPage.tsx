@@ -6,15 +6,12 @@ import {
   ArrowLeft,
   CalendarDays,
   ClipboardCheck,
-  Eye,
-  EyeOff,
   Gift,
   LockKeyhole,
   LogIn,
   LogOut,
   WalletCards
 } from "lucide-react";
-import { AdminToolbar } from "@/components/admin/AdminToolbar";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
 import { DialogShell } from "@/components/ui/DialogShell";
@@ -22,7 +19,8 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { currentEvent } from "@/data/event";
 import { giftAssignments, giftExchange, giftParticipants } from "@/data/gift-exchange";
 import { createGiftAssignments } from "@/lib/gift-draw";
-import { mockAdmin } from "@/lib/mock-admin";
+import { useAdmin } from "@/hooks/useAdmin";
+import { usePreview } from "@/components/PreviewProvider";
 import type { GiftExchange, GiftParticipant } from "@/types/gift-exchange";
 import { AdminGiftPanel } from "./AdminGiftPanel";
 import { AssignmentView } from "./AssignmentView";
@@ -41,7 +39,6 @@ export function TukarHadiahPage() {
   const [loginError, setLoginError] = useState<string>();
   const [drawError, setDrawError] = useState<string>();
   const [toast, setToast] = useState<string>();
-  const [isPreviewing, setIsPreviewing] = useState(false);
   const [isSetupOpen, setIsSetupOpen] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isParticipantDialogOpen, setIsParticipantDialogOpen] = useState(false);
@@ -49,7 +46,9 @@ export function TukarHadiahPage() {
   const [editingParticipant, setEditingParticipant] = useState<GiftParticipant>();
   const [pendingDelete, setPendingDelete] = useState<GiftParticipant>();
 
-  const isAdmin = mockAdmin.isEnabled && mockAdmin.isAdmin && !isPreviewing;
+  const { isAdmin: isAuthedAdmin } = useAdmin();
+  const { isPreviewing } = usePreview();
+  const isAdmin = isAuthedAdmin && !isPreviewing;
   const activeParticipant = participants.find((participant) => participant.id === activeParticipantId);
   const activeAssignment = assignments.find((assignment) => assignment.giverParticipantId === activeParticipantId);
   const recipient = activeAssignment
@@ -183,16 +182,6 @@ export function TukarHadiahPage() {
           <ArrowLeft size={18} aria-hidden="true" />
           <span>Balik ke Arkib</span>
         </Link>
-
-        {mockAdmin.isEnabled && mockAdmin.isAdmin ? (
-          <AdminToolbar>
-            <span className={styles.toolbarCopy}>Admin Mode</span>
-            <Button onClick={() => setIsPreviewing((value) => !value)} variant="secondary">
-              {isPreviewing ? <EyeOff size={16} aria-hidden="true" /> : <Eye size={16} aria-hidden="true" />}
-              {isPreviewing ? "Exit Preview" : "Preview"}
-            </Button>
-          </AdminToolbar>
-        ) : null}
 
         <PageHeader
           description={

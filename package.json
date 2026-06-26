@@ -9,7 +9,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@auth/core": "^0.41.2",
     "@base-ui-components/react": "latest",
+    "@convex-dev/auth": "^0.0.94",
+    "convex": "^1.42.0",
     "lucide-react": "latest",
     "motion": "latest",
     "next": "latest",

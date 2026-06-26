@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowLeft, Eye, EyeOff, Plus } from "lucide-react";
-import { AdminToolbar } from "@/components/admin/AdminToolbar";
+import { ArrowLeft, Plus } from "lucide-react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
 import { DialogShell } from "@/components/ui/DialogShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { reunionTasks } from "@/data/tasks";
-import { mockAdmin } from "@/lib/mock-admin";
+import { useAdmin } from "@/hooks/useAdmin";
+import { usePreview } from "@/components/PreviewProvider";
 import type { ReunionTask, TaskStatus } from "@/types/tasks";
 import { TaskBoard } from "./TaskBoard";
 import { TaskDialog } from "./dialogs/TaskDialog";
@@ -18,14 +18,15 @@ import styles from "./GerakKerjaPage.module.css";
 export function GerakKerjaPage() {
   const [tasks, setTasks] = useState<ReunionTask[]>(reunionTasks);
   const [activeStatus, setActiveStatus] = useState<TaskStatus>("todo");
-  const [isPreviewing, setIsPreviewing] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ReunionTask>();
   const [dialogStatus, setDialogStatus] = useState<TaskStatus>("todo");
   const [pendingDelete, setPendingDelete] = useState<ReunionTask>();
   const [toast, setToast] = useState<string>();
 
-  const isAdmin = mockAdmin.isEnabled && mockAdmin.isAdmin && !isPreviewing;
+  const { isAdmin: isAuthedAdmin } = useAdmin();
+  const { isPreviewing } = usePreview();
+  const isAdmin = isAuthedAdmin && !isPreviewing;
   const isBoardEmpty = tasks.length === 0;
 
   function showToast(message: string) {
@@ -89,16 +90,6 @@ export function GerakKerjaPage() {
           <ArrowLeft size={18} aria-hidden="true" />
           <span>Balik ke Arkib</span>
         </Link>
-
-        {mockAdmin.isEnabled && mockAdmin.isAdmin ? (
-          <AdminToolbar>
-            <span className={styles.toolbarCopy}>Admin Mode</span>
-            <Button onClick={() => setIsPreviewing((value) => !value)} variant="secondary">
-              {isPreviewing ? <EyeOff size={16} aria-hidden="true" /> : <Eye size={16} aria-hidden="true" />}
-              {isPreviewing ? "Exit Preview" : "Preview"}
-            </Button>
-          </AdminToolbar>
-        ) : null}
 
         <PageHeader
           action={
