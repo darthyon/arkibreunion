@@ -12,14 +12,13 @@ import {
   LogOut,
   WalletCards
 } from "lucide-react";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@convex/_generated/api";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
 import { DialogShell } from "@/components/ui/DialogShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { giftAssignments, giftExchange, giftParticipants } from "@/data/gift-exchange";
-import { createGiftAssignments } from "@/lib/gift-draw";
 import { useAdmin } from "@/hooks/useAdmin";
 import { usePreview } from "@/components/PreviewProvider";
 import type { GiftExchange, GiftParticipant } from "@/types/gift-exchange";
@@ -51,6 +50,8 @@ export function TukarHadiahPage() {
   // the gift mutations (2b) and guest PIN flow (2c) land.
   const event = useQuery(api.event.get);
   const exchangeDoc = useQuery(api.giftExchange.get);
+  const updateExchange = useMutation(api.giftExchange.update);
+  const runDraw = useMutation(api.giftExchange.runDraw);
 
   useEffect(() => {
     if (!exchangeDoc) return;
@@ -137,8 +138,12 @@ export function TukarHadiahPage() {
     showToast("Wishlist disimpan. Semoga orang faham hint.");
   }
 
-  function handleSaveSetup(nextExchange: GiftExchange) {
-    setExchange(nextExchange);
+  async function handleSaveSetup(nextExchange: GiftExchange) {
+    await updateExchange({
+      budgetText: nextExchange.budgetText,
+      description: nextExchange.description,
+      picNames: nextExchange.picNames
+    });
     setIsSetupOpen(false);
     showToast("Setup Tukar Hadiah dikemaskini.");
   }
@@ -174,20 +179,14 @@ export function TukarHadiahPage() {
     showToast("Peserta dipadam. Cabutan perlu run semula.");
   }
 
-  function handleRunDraw() {
+  async function handleRunDraw() {
+    const wasDrawn = exchange.isDrawn;
     try {
-      const nextAssignments = createGiftAssignments(participants, exchange.id);
-      const drawnAt = new Date().toISOString();
-
-      setAssignments(nextAssignments);
-      setExchange((currentExchange) => ({
-        ...currentExchange,
-        isDrawn: true,
-        drawnAt
-      }));
+      // Draw runs server-side over the Convex participant roster and persists.
+      await runDraw({});
       setDrawError(undefined);
       setIsDrawDialogOpen(false);
-      showToast(exchange.isDrawn ? "Cabutan hadiah dirun semula." : "Cabutan hadiah selesai.");
+      showToast(wasDrawn ? "Cabutan hadiah dirun semula." : "Cabutan hadiah selesai.");
     } catch (error) {
       setDrawError(error instanceof Error ? error.message : "Cabutan gagal.");
       setIsDrawDialogOpen(false);
@@ -237,7 +236,7 @@ export function TukarHadiahPage() {
             <div>
               <span>Status Cabutan</span>
               <strong>{exchange.isDrawn ? "Sudah dibuat" : "Belum dibuat"}</strong>
-              <small>{exchange.isDrawn ? `${assignments.length} assignment` : "Menunggu admin"}</small>
+              <small>{exchange.isDrawn ? "Cabutan tersimpan" : "Menunggu admin"}</small>
             </div>
           </div>
         </section>

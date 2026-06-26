@@ -78,7 +78,7 @@ export function AdminGiftPanel({
         </div>
       </section>
 
-      {assignments.length === 0 ? (
+      {!exchange.isDrawn ? (
         <div className={styles.adminAlert}>
           <AlertCircle size={18} aria-hidden="true" />
           <span>Run draw bila senarai peserta dah lengkap.</span>
