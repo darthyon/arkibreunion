@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useQuery } from "convex/react";
+import { useMemo, useState } from "react";
+import { useMutation, useQuery } from "convex/react";
 import { ArrowLeft, Plus } from "lucide-react";
 import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
 import { DialogShell } from "@/components/ui/DialogShell";
@@ -18,14 +19,15 @@ import styles from "./GerakKerjaPage.module.css";
 
 export function GerakKerjaPage() {
   const taskDocs = useQuery(api.tasks.list);
-  const [tasks, setTasks] = useState<ReunionTask[]>([]);
+  const createTask = useMutation(api.tasks.create);
+  const updateTask = useMutation(api.tasks.update);
+  const setTaskStatus = useMutation(api.tasks.setStatus);
+  const removeTask = useMutation(api.tasks.remove);
 
-  // Hydrate local board state from Convex. Admin edits stay local until the
-  // CRUD mutations land in phase 2b.
-  useEffect(() => {
-    if (!taskDocs) return;
-    setTasks(
-      taskDocs.map((doc) => ({
+  // Convex is the source of truth; the board derives straight from the query.
+  const tasks: ReunionTask[] = useMemo(
+    () =>
+      (taskDocs ?? []).map((doc) => ({
         id: doc._id,
         title: doc.title,
         description: doc.description,
@@ -34,9 +36,10 @@ export function GerakKerjaPage() {
         status: doc.status,
         createdAt: doc.createdAt,
         updatedAt: doc.updatedAt
-      }))
-    );
-  }, [taskDocs]);
+      })),
+    [taskDocs]
+  );
+
   const [activeStatus, setActiveStatus] = useState<TaskStatus>("todo");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ReunionTask>();
@@ -67,40 +70,43 @@ export function GerakKerjaPage() {
     setIsDialogOpen(true);
   }
 
-  function handleSaveTask(task: ReunionTask) {
-    const existingTask = tasks.find((item) => item.id === task.id);
+  async function handleSaveTask(task: ReunionTask) {
+    const isEditing = Boolean(editingTask);
+    const payload = {
+      title: task.title,
+      description: task.description,
+      ownerName: task.ownerName ?? "",
+      picNames: task.picNames,
+      status: task.status
+    };
 
-    if (existingTask) {
-      setTasks((currentTasks) => currentTasks.map((item) => (item.id === task.id ? task : item)));
+    if (isEditing && editingTask) {
+      await updateTask({ id: editingTask.id as Id<"tasks">, ...payload });
     } else {
-      setTasks((currentTasks) => [...currentTasks, task]);
+      await createTask(payload);
     }
 
     setEditingTask(undefined);
     setIsDialogOpen(false);
-    showToast(existingTask ? "Tugas dikemaskini." : "Tugas ditambah. Negara bergerak sedikit.");
+    showToast(isEditing ? "Tugas dikemaskini." : "Tugas ditambah. Negara bergerak sedikit.");
   }
 
-  function handleConfirmDelete() {
+  async function handleConfirmDelete() {
     if (!pendingDelete) {
       return;
     }
 
-    setTasks((currentTasks) => currentTasks.filter((task) => task.id !== pendingDelete.id));
+    await removeTask({ id: pendingDelete.id as Id<"tasks"> });
     setPendingDelete(undefined);
     showToast("Tugas dipadam.");
   }
 
-  function handleStatusChange(task: ReunionTask, status: TaskStatus) {
+  async function handleStatusChange(task: ReunionTask, status: TaskStatus) {
     if (task.status === status) {
       return;
     }
 
-    setTasks((currentTasks) =>
-      currentTasks.map((item) =>
-        item.id === task.id ? { ...item, status, updatedAt: new Date().toISOString() } : item
-      )
-    );
+    await setTaskStatus({ id: task.id as Id<"tasks">, status });
     showToast("Status tugas dikemaskini.");
   }
 
