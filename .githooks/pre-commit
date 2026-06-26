@@ -1,0 +1,23 @@
+#!/bin/sh
+# Guardrail: CLAUDE.md and AGENTS.md must stay linked.
+#
+# AGENTS.md is the canonical project doc (read by Cursor, Codex, Gemini, etc.).
+# CLAUDE.md must import it via "@AGENTS.md" so Claude Code reads the same thing.
+# We check the import LINE is present (not an exact file match) because Convex
+# re-injects its <!-- convex-ai-* --> block into CLAUDE.md on `convex dev`.
+#
+# If this fails, CLAUDE.md drifted (e.g. got overwritten). Fix with:
+#   printf '@AGENTS.md\n' > CLAUDE.md
+
+if [ ! -f AGENTS.md ]; then
+  echo "pre-commit: AGENTS.md is missing — it is the canonical project doc." >&2
+  exit 1
+fi
+
+if ! grep -q '@AGENTS.md' CLAUDE.md 2>/dev/null; then
+  echo "pre-commit: CLAUDE.md no longer imports AGENTS.md." >&2
+  echo "  Restore the link:  printf '@AGENTS.md\\n' > CLAUDE.md" >&2
+  exit 1
+fi
+
+exit 0
