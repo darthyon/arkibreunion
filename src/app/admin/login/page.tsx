@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { LogIn } from "lucide-react";
 import { PageContainer } from "@/components/layout/PageContainer";
@@ -10,19 +10,8 @@ import { Button } from "@/components/ui/Button";
 import { FormField } from "@/components/ui/FormField";
 
 export default function AdminLoginPage() {
-  return (
-    <Suspense fallback={null}>
-      <AdminLoginForm />
-    </Suspense>
-  );
-}
-
-function AdminLoginForm() {
   const { signIn } = useAuthActions();
   const router = useRouter();
-  // One-time account creation: visit /admin/login?setup=1 to create the single
-  // admin account, then use the plain sign-in form thereafter.
-  const isSetup = useSearchParams().get("setup") === "1";
   const [error, setError] = useState<string>();
   const [submitting, setSubmitting] = useState(false);
 
@@ -36,11 +25,11 @@ function AdminLoginForm() {
       await signIn("password", {
         email: String(formData.get("email") ?? ""),
         password: String(formData.get("password") ?? ""),
-        flow: isSetup ? "signUp" : "signIn"
+        flow: "signIn"
       });
       router.push("/");
     } catch {
-      setError(isSetup ? "Gagal cipta akaun." : "Email atau kata laluan salah.");
+      setError("Email atau kata laluan salah.");
       setSubmitting(false);
     }
   }
@@ -48,7 +37,7 @@ function AdminLoginForm() {
   return (
     <PageContainer size="readable">
       <PageHeader
-        title={isSetup ? "Cipta Akaun Admin" : "Log Masuk Admin"}
+        title="Log Masuk Admin"
         description="Hanya untuk organiser. Rakyat biasa guna PIN di Tukar Hadiah."
       />
       <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", maxWidth: 360 }}>
@@ -64,11 +53,7 @@ function AdminLoginForm() {
 
         <Button type="submit" disabled={submitting}>
           <LogIn size={17} aria-hidden="true" />
-          {submitting
-            ? "Sedang masuk…"
-            : isSetup
-              ? "Cipta Akaun"
-              : "Log Masuk"}
+          {submitting ? "Sedang masuk…" : "Log Masuk"}
         </Button>
       </form>
     </PageContainer>
