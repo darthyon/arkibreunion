@@ -1,29 +1,29 @@
 import { AlertCircle, ClipboardCheck, Gift, LockKeyhole, Plus, Settings, Users } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import type { GiftAssignment, GiftExchange, GiftParticipant } from "@/types/gift-exchange";
+import type { AdminParticipant, GiftExchange } from "@/types/gift-exchange";
 import { ParticipantList } from "./ParticipantList";
 import styles from "./TukarHadiahPage.module.css";
 
 type AdminGiftPanelProps = {
-  assignments: GiftAssignment[];
   drawError?: string;
   exchange: GiftExchange;
   onAddParticipant: () => void;
-  onDeleteParticipant: (participant: GiftParticipant) => void;
-  onEditParticipant: (participant: GiftParticipant) => void;
+  onDeleteParticipant: (participant: AdminParticipant) => void;
+  onEditParticipant: (participant: AdminParticipant) => void;
   onEditSetup: () => void;
+  onResetPin: (participant: AdminParticipant) => void;
   onRunDraw: () => void;
-  participants: GiftParticipant[];
+  participants: AdminParticipant[];
 };
 
 export function AdminGiftPanel({
-  assignments,
   drawError,
   exchange,
   onAddParticipant,
   onDeleteParticipant,
   onEditParticipant,
   onEditSetup,
+  onResetPin,
   onRunDraw,
   participants
 }: AdminGiftPanelProps) {
@@ -90,14 +90,14 @@ export function AdminGiftPanel({
           <div className={styles.subsectionHeader}>
             <div>
               <h3>Participants</h3>
-              <p>PIN hanya dipaparkan untuk admin.</p>
+              <p>PIN dijana semasa tambah/reset — catat sekali sahaja.</p>
             </div>
             <span>{participants.length} peserta</span>
           </div>
           <ParticipantList
-            assignments={assignments}
             onDelete={onDeleteParticipant}
             onEdit={onEditParticipant}
+            onResetPin={onResetPin}
             participants={participants}
           />
         </section>

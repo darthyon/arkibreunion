@@ -12,16 +12,16 @@ import {
   LogOut,
   WalletCards
 } from "lucide-react";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
 import { DialogShell } from "@/components/ui/DialogShell";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { giftAssignments, giftExchange, giftParticipants } from "@/data/gift-exchange";
 import { useAdmin } from "@/hooks/useAdmin";
 import { usePreview } from "@/components/PreviewProvider";
-import type { GiftExchange, GiftParticipant } from "@/types/gift-exchange";
+import type { AdminParticipant, GiftExchange } from "@/types/gift-exchange";
 import { AdminGiftPanel } from "./AdminGiftPanel";
 import { AssignmentView } from "./AssignmentView";
 import { ParticipantLogin } from "./ParticipantLogin";
@@ -31,11 +31,49 @@ import { ParticipantDialog } from "./dialogs/ParticipantDialog";
 import { RunDrawDialog } from "./dialogs/RunDrawDialog";
 import styles from "./TukarHadiahPage.module.css";
 
+// Opaque guest session token. localStorage (not httpOnly) because the client
+// reads its own gift data via useQuery(token) — defence is server-side rate
+// limiting on PIN attempts, not token secrecy.
+const TOKEN_KEY = "gift-session-token";
+
 export function TukarHadiahPage() {
-  const [exchange, setExchange] = useState<GiftExchange>(giftExchange);
-  const [participants, setParticipants] = useState<GiftParticipant[]>(giftParticipants);
-  const [assignments, setAssignments] = useState(giftAssignments);
-  const [activeParticipantId, setActiveParticipantId] = useState<string | null>(null);
+  const event = useQuery(api.event.get);
+  const exchangeDoc = useQuery(api.giftExchange.get);
+  const updateExchange = useMutation(api.giftExchange.update);
+  const runDraw = useMutation(api.giftExchange.runDraw);
+
+  const { isAdmin: isAuthedAdmin } = useAdmin();
+  const { isPreviewing } = usePreview();
+  const isAdmin = isAuthedAdmin && !isPreviewing;
+
+  // --- Guest session (name + PIN, scoped to Tukar Hadiah) ---
+  const [token, setToken] = useState<string | null>(null);
+  useEffect(() => {
+    setToken(window.localStorage.getItem(TOKEN_KEY));
+  }, []);
+  const guest = useQuery(api.participants.getBySession, token ? { token } : "skip");
+  const myAssignment = useQuery(api.participants.myAssignment, token ? { token } : "skip");
+  const verifyPin = useAction(api.participants.verifyPin);
+  const submitWishlist = useMutation(api.participants.submitWishlist);
+  const isLoggedIn = Boolean(guest);
+
+  // --- Admin roster (only queried when admin; query is admin-gated) ---
+  const adminParticipants = useQuery(api.participants.list, isAdmin ? {} : "skip");
+  const createParticipant = useMutation(api.participants.create);
+  const updateParticipant = useMutation(api.participants.update);
+  const removeParticipant = useMutation(api.participants.remove);
+  const resetPin = useMutation(api.participants.resetPin);
+
+  const exchange: GiftExchange = {
+    id: exchangeDoc?._id ?? "",
+    eventId: "",
+    picNames: exchangeDoc?.picNames ?? [],
+    budgetText: exchangeDoc?.budgetText,
+    description: exchangeDoc?.description,
+    isDrawn: exchangeDoc?.isDrawn ?? false,
+    drawnAt: exchangeDoc?.drawnAt
+  };
+
   const [loginError, setLoginError] = useState<string>();
   const [drawError, setDrawError] = useState<string>();
   const [toast, setToast] = useState<string>();
@@ -43,41 +81,11 @@ export function TukarHadiahPage() {
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isParticipantDialogOpen, setIsParticipantDialogOpen] = useState(false);
   const [isDrawDialogOpen, setIsDrawDialogOpen] = useState(false);
-  const [editingParticipant, setEditingParticipant] = useState<GiftParticipant>();
-  const [pendingDelete, setPendingDelete] = useState<GiftParticipant>();
-
-  // Public reads from Convex. Participant roster + draw stay on local mock until
-  // the gift mutations (2b) and guest PIN flow (2c) land.
-  const event = useQuery(api.event.get);
-  const exchangeDoc = useQuery(api.giftExchange.get);
-  const updateExchange = useMutation(api.giftExchange.update);
-  const runDraw = useMutation(api.giftExchange.runDraw);
-
-  useEffect(() => {
-    if (!exchangeDoc) return;
-    setExchange((current) => ({
-      ...current,
-      id: exchangeDoc._id,
-      picNames: exchangeDoc.picNames,
-      budgetText: exchangeDoc.budgetText,
-      description: exchangeDoc.description,
-      isDrawn: exchangeDoc.isDrawn,
-      drawnAt: exchangeDoc.drawnAt
-    }));
-  }, [exchangeDoc]);
-
-  const { isAdmin: isAuthedAdmin } = useAdmin();
-  const { isPreviewing } = usePreview();
-  const isAdmin = isAuthedAdmin && !isPreviewing;
-  const activeParticipant = participants.find((participant) => participant.id === activeParticipantId);
-  const activeAssignment = assignments.find((assignment) => assignment.giverParticipantId === activeParticipantId);
-  const recipient = activeAssignment
-    ? participants.find((participant) => participant.id === activeAssignment.receiverParticipantId)
-    : undefined;
+  const [editingParticipant, setEditingParticipant] = useState<AdminParticipant>();
+  const [pendingDelete, setPendingDelete] = useState<AdminParticipant>();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-
     if (params.get("login") === "rakyat") {
       window.setTimeout(() => setIsLoginDialogOpen(true), 0);
       window.history.replaceState(null, "", window.location.pathname);
@@ -86,55 +94,32 @@ export function TukarHadiahPage() {
 
   function showToast(message: string) {
     setToast(message);
-    window.setTimeout(() => setToast(undefined), 3200);
+    window.setTimeout(() => setToast(undefined), 4200);
   }
 
-  function clearDrawIfRosterChanged(nextExchange = exchange) {
-    setAssignments([]);
-    setExchange({
-      ...nextExchange,
-      isDrawn: false,
-      drawnAt: undefined
-    });
-  }
-
-  function handleParticipantLogin(values: { name: string; pin: string }) {
-    const name = values.name.trim().toLowerCase();
-    const pin = values.pin.trim();
-    const participant = participants.find(
-      (item) => item.name.trim().toLowerCase() === name && item.pin === pin
-    );
-
-    if (!participant) {
-      setLoginError("Nama atau PIN tak jumpa. Cuba semak balik.");
-      return;
-    }
-
+  async function handleParticipantLogin(values: { name: string; pin: string }) {
     setLoginError(undefined);
-    setActiveParticipantId(participant.id);
-    setIsLoginDialogOpen(false);
+    const result = await verifyPin({ name: values.name, pin: values.pin });
+    if (result.ok) {
+      window.localStorage.setItem(TOKEN_KEY, result.token);
+      setToken(result.token);
+      setIsLoginDialogOpen(false);
+    } else if (result.error === "locked") {
+      const mins = result.retryAfterMs ? Math.ceil(result.retryAfterMs / 60000) : 5;
+      setLoginError(`Terlalu banyak cubaan. Cuba lagi dalam ${mins} minit.`);
+    } else {
+      setLoginError("Nama atau PIN tak jumpa. Cuba semak balik.");
+    }
   }
 
-  function handleWishlistSave(wishlist: string) {
-    if (!activeParticipant) {
-      return;
-    }
+  function handleLogout() {
+    window.localStorage.removeItem(TOKEN_KEY);
+    setToken(null);
+  }
 
-    const trimmedWishlist = wishlist.trim();
-    const now = new Date().toISOString();
-
-    setParticipants((currentParticipants) =>
-      currentParticipants.map((participant) =>
-        participant.id === activeParticipant.id
-          ? {
-              ...participant,
-              wishlist: trimmedWishlist,
-              hasSubmittedWishlist: trimmedWishlist.length > 0,
-              updatedAt: now
-            }
-          : participant
-      )
-    );
+  async function handleWishlistSave(wishlist: string) {
+    if (!token) return;
+    await submitWishlist({ token, wishlist });
     showToast("Wishlist disimpan. Semoga orang faham hint.");
   }
 
@@ -148,41 +133,36 @@ export function TukarHadiahPage() {
     showToast("Setup Tukar Hadiah dikemaskini.");
   }
 
-  function handleSaveParticipant(participant: GiftParticipant) {
-    const existingParticipant = participants.find((item) => item.id === participant.id);
-
-    if (existingParticipant) {
-      setParticipants((currentParticipants) =>
-        currentParticipants.map((item) => (item.id === participant.id ? participant : item))
-      );
+  async function handleSaveParticipant(values: { name: string; pin?: string }) {
+    if (editingParticipant) {
+      await updateParticipant({
+        participantId: editingParticipant.id as Id<"participants">,
+        name: values.name
+      });
+      showToast("Peserta dikemaskini.");
     } else {
-      setParticipants((currentParticipants) => [...currentParticipants, participant]);
-      clearDrawIfRosterChanged();
+      const result = await createParticipant({ name: values.name, pin: values.pin });
+      showToast(`Peserta ditambah. PIN ${values.name}: ${result.pin}`);
     }
-
     setEditingParticipant(undefined);
     setIsParticipantDialogOpen(false);
-    showToast(existingParticipant ? "Peserta dikemaskini." : "Peserta ditambah.");
   }
 
-  function handleConfirmDelete() {
-    if (!pendingDelete) {
-      return;
-    }
-
-    setParticipants((currentParticipants) =>
-      currentParticipants.filter((participant) => participant.id !== pendingDelete.id)
-    );
-    setActiveParticipantId((currentId) => (currentId === pendingDelete.id ? null : currentId));
-    clearDrawIfRosterChanged();
+  async function handleConfirmDelete() {
+    if (!pendingDelete) return;
+    await removeParticipant({ participantId: pendingDelete.id as Id<"participants"> });
     setPendingDelete(undefined);
     showToast("Peserta dipadam. Cabutan perlu run semula.");
+  }
+
+  async function handleResetPin(participant: AdminParticipant) {
+    const result = await resetPin({ participantId: participant.id as Id<"participants"> });
+    showToast(`PIN baru ${participant.name}: ${result.pin}`);
   }
 
   async function handleRunDraw() {
     const wasDrawn = exchange.isDrawn;
     try {
-      // Draw runs server-side over the Convex participant roster and persists.
       await runDraw({});
       setDrawError(undefined);
       setIsDrawDialogOpen(false);
@@ -205,7 +185,7 @@ export function TukarHadiahPage() {
           description={
             isAdmin
               ? "Kemaskini peserta, wishlist, dan cabutan hadiah."
-              : activeParticipant
+              : isLoggedIn
                 ? "Akses peribadi untuk hadiah yang kononnya rahsia."
                 : "Cabutan nama, wishlist, dan sedikit unsur suspen."
           }
@@ -241,17 +221,17 @@ export function TukarHadiahPage() {
           </div>
         </section>
 
-        <section className={`${styles.authStrip} ${activeParticipant ? styles.authStripLoggedIn : ""}`}>
+        <section className={`${styles.authStrip} ${isLoggedIn ? styles.authStripLoggedIn : ""}`}>
           <div className={styles.authCopy}>
-            {activeParticipant ? <LogOut size={18} aria-hidden="true" /> : <LogIn size={18} aria-hidden="true" />}
+            {isLoggedIn ? <LogOut size={18} aria-hidden="true" /> : <LogIn size={18} aria-hidden="true" />}
             <p>
-              {activeParticipant
-                ? `Hi ${activeParticipant.name}, anda sedang log masuk sebagai rakyat biasa.`
+              {isLoggedIn
+                ? `Hi ${guest?.name}, anda sedang log masuk sebagai rakyat biasa.`
                 : "Belum log masuk sebagai rakyat biasa."}
             </p>
           </div>
-          {activeParticipant ? (
-            <Button onClick={() => setActiveParticipantId(null)} variant="secondary">
+          {isLoggedIn ? (
+            <Button onClick={handleLogout} variant="secondary">
               <LogOut size={17} aria-hidden="true" />
               Keluar
             </Button>
@@ -263,17 +243,17 @@ export function TukarHadiahPage() {
           )}
         </section>
 
-        {activeParticipant ? (
+        {isLoggedIn && guest ? (
           <div className={styles.contentGrid}>
             <section className={styles.panel}>
               <div className={styles.panelHeader}>
                 <LockKeyhole size={18} aria-hidden="true" />
                 <h2>Wishlist Saya</h2>
               </div>
-              <WishlistForm onSave={handleWishlistSave} value={activeParticipant.wishlist} />
+              <WishlistForm onSave={handleWishlistSave} value={guest.wishlist} />
             </section>
 
-            <AssignmentView assignment={activeAssignment} exchange={exchange} recipient={recipient} />
+            <AssignmentView isDrawn={exchange.isDrawn} recipient={myAssignment ?? undefined} />
           </div>
         ) : (
           <div className={styles.contentGrid}>
@@ -313,7 +293,6 @@ export function TukarHadiahPage() {
 
         {isAdmin ? (
           <AdminGiftPanel
-            assignments={assignments}
             drawError={drawError}
             exchange={exchange}
             onAddParticipant={() => {
@@ -326,8 +305,9 @@ export function TukarHadiahPage() {
               setIsParticipantDialogOpen(true);
             }}
             onEditSetup={() => setIsSetupOpen(true)}
+            onResetPin={handleResetPin}
             onRunDraw={() => setIsDrawDialogOpen(true)}
-            participants={participants}
+            participants={adminParticipants ?? []}
           />
         ) : null}
 
@@ -362,7 +342,6 @@ export function TukarHadiahPage() {
         </DialogShell>
 
         <ParticipantDialog
-          exchangeId={exchange.id}
           onClose={() => {
             setEditingParticipant(undefined);
             setIsParticipantDialogOpen(false);

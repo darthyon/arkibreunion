@@ -1,18 +1,17 @@
 import { Button } from "@/components/ui/Button";
 import { DialogShell } from "@/components/ui/DialogShell";
 import { FormField } from "@/components/ui/FormField";
-import type { GiftParticipant } from "@/types/gift-exchange";
+import type { AdminParticipant } from "@/types/gift-exchange";
 import styles from "../TukarHadiahPage.module.css";
 
 type ParticipantDialogProps = {
-  exchangeId: string;
   onClose: () => void;
-  onSave: (participant: GiftParticipant) => void;
+  onSave: (values: { name: string; pin?: string }) => void;
   open: boolean;
-  participant?: GiftParticipant;
+  participant?: AdminParticipant;
 };
 
-export function ParticipantDialog({ exchangeId, onClose, onSave, open, participant }: ParticipantDialogProps) {
+export function ParticipantDialog({ onClose, onSave, open, participant }: ParticipantDialogProps) {
   const isEditing = Boolean(participant);
 
   return (
@@ -41,18 +40,10 @@ export function ParticipantDialog({ exchangeId, onClose, onSave, open, participa
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const now = new Date().toISOString();
-          const wishlist = String(formData.get("wishlist") ?? "").trim();
-
+          const pin = String(formData.get("pin") ?? "").trim();
           onSave({
-            id: participant?.id ?? `gift-participant-${Date.now()}`,
-            exchangeId,
             name: String(formData.get("name") ?? "").trim(),
-            pin: String(formData.get("pin") ?? "").trim(),
-            wishlist,
-            hasSubmittedWishlist: wishlist.length > 0,
-            createdAt: participant?.createdAt ?? now,
-            updatedAt: now
+            pin: pin.length > 0 ? pin : undefined
           });
         }}
       >
@@ -60,13 +51,11 @@ export function ParticipantDialog({ exchangeId, onClose, onSave, open, participa
           <input defaultValue={participant?.name} name="name" placeholder="Nama peserta" required />
         </FormField>
 
-        <FormField label="PIN">
-          <input defaultValue={participant?.pin} inputMode="numeric" name="pin" placeholder="4821" required />
-        </FormField>
-
-        <FormField label="Wishlist, optional">
-          <textarea defaultValue={participant?.wishlist} name="wishlist" rows={4} />
-        </FormField>
+        {isEditing ? null : (
+          <FormField hint="Biar kosong untuk jana PIN automatik (4 digit)." label="PIN, optional">
+            <input inputMode="numeric" name="pin" placeholder="4821" />
+          </FormField>
+        )}
       </form>
     </DialogShell>
   );

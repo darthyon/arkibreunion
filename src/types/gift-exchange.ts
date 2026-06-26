@@ -8,21 +8,18 @@ export type GiftExchange = {
   drawnAt?: string;
 };
 
-export type GiftParticipant = {
+// Admin-facing participant row from Convex (never includes PIN/hash/token).
+export type AdminParticipant = {
   id: string;
-  exchangeId: string;
   name: string;
-  pin: string;
-  wishlist?: string;
   hasSubmittedWishlist: boolean;
-  createdAt: string;
-  updatedAt: string;
+  wishlist: string;
+  isLocked: boolean;
 };
 
-export type GiftAssignment = {
-  id: string;
-  exchangeId: string;
-  giverParticipantId: string;
-  receiverParticipantId: string;
-  createdAt: string;
+// The guest's own scoped assignment view: just the recipient.
+export type MyAssignment = {
+  name: string;
+  wishlist: string;
+  hasSubmittedWishlist: boolean;
 };

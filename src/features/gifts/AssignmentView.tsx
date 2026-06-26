@@ -1,15 +1,14 @@
 import { Gift, LockKeyhole } from "lucide-react";
-import type { GiftAssignment, GiftExchange, GiftParticipant } from "@/types/gift-exchange";
+import type { MyAssignment } from "@/types/gift-exchange";
 import styles from "./TukarHadiahPage.module.css";
 
 type AssignmentViewProps = {
-  assignment?: GiftAssignment;
-  exchange: GiftExchange;
-  recipient?: Pick<GiftParticipant, "name" | "wishlist" | "hasSubmittedWishlist">;
+  isDrawn: boolean;
+  recipient?: MyAssignment;
 };
 
-export function AssignmentView({ assignment, exchange, recipient }: AssignmentViewProps) {
-  if (!exchange.isDrawn || !assignment || !recipient) {
+export function AssignmentView({ isDrawn, recipient }: AssignmentViewProps) {
+  if (!isDrawn || !recipient) {
     return (
       <section className={styles.panel}>
         <div className={styles.panelHeader}>

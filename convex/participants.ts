@@ -4,7 +4,8 @@ import {
   internalMutation,
   internalQuery,
   mutation,
-  query
+  query,
+  type MutationCtx
 } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { hashPin, verifyPinHash } from "./lib/pin";
@@ -104,7 +105,65 @@ export const getBySession = query({
   }
 });
 
+// Guest submits/updates their own wishlist, identified by the session token.
+// No admin gate — the token IS the credential.
+export const submitWishlist = mutation({
+  args: { token: v.string(), wishlist: v.string() },
+  handler: async (ctx, { token, wishlist }) => {
+    const p = await ctx.db
+      .query("participants")
+      .withIndex("by_session_token", (q) => q.eq("sessionToken", token))
+      .first();
+    if (!p) throw new Error("Sesi tamat. Sila log masuk semula.");
+    const trimmed = wishlist.trim();
+    await ctx.db.patch(p._id, {
+      wishlist: trimmed,
+      hasSubmittedWishlist: trimmed.length > 0,
+      updatedAt: new Date().toISOString()
+    });
+  }
+});
+
+// The guest's OWN assignment only: recipient name + wishlist. Never returns the
+// full assignment list — privacy is enforced here at the query layer.
+export const myAssignment = query({
+  args: { token: v.string() },
+  handler: async (ctx, { token }) => {
+    const me = await ctx.db
+      .query("participants")
+      .withIndex("by_session_token", (q) => q.eq("sessionToken", token))
+      .first();
+    if (!me) return null;
+
+    const assignment = await ctx.db
+      .query("assignments")
+      .withIndex("by_giver", (q) => q.eq("giverParticipantId", me._id))
+      .first();
+    if (!assignment) return null;
+
+    const recipient = await ctx.db.get(assignment.receiverParticipantId);
+    if (!recipient) return null;
+
+    return {
+      name: recipient.name,
+      wishlist: recipient.wishlist ?? "",
+      hasSubmittedWishlist: recipient.hasSubmittedWishlist
+    };
+  }
+});
+
 // --- Admin: participant + PIN management ------------------------------------
+
+// Clears the draw — called when the roster changes so stale pairings don't
+// linger. Admins re-run the draw afterwards.
+async function clearDraw(ctx: MutationCtx) {
+  const assignments = await ctx.db.query("assignments").collect();
+  for (const a of assignments) await ctx.db.delete(a._id);
+  const exchange = await ctx.db.query("giftExchange").first();
+  if (exchange?.isDrawn) {
+    await ctx.db.patch(exchange._id, { isDrawn: false, drawnAt: undefined });
+  }
+}
 
 export const list = query({
   args: {},
@@ -138,7 +197,30 @@ export const create = mutation({
       failedAttempts: 0,
       updatedAt: new Date().toISOString()
     });
+    await clearDraw(ctx); // roster changed → any existing draw is stale
     return { id, pin: plainPin };
+  }
+});
+
+// Admin renames a participant. PIN changes go through resetPin.
+export const update = mutation({
+  args: { participantId: v.id("participants"), name: v.string() },
+  handler: async (ctx, { participantId, name }) => {
+    await requireAdmin(ctx);
+    await ctx.db.patch(participantId, {
+      name: name.trim(),
+      updatedAt: new Date().toISOString()
+    });
+  }
+});
+
+// Admin removes a participant; the draw is reset since the ring is now broken.
+export const remove = mutation({
+  args: { participantId: v.id("participants") },
+  handler: async (ctx, { participantId }) => {
+    await requireAdmin(ctx);
+    await ctx.db.delete(participantId);
+    await clearDraw(ctx);
   }
 });
 

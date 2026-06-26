@@ -175,5 +175,5 @@ export default defineSchema({
   assignments: defineTable({
     giverParticipantId: v.id("participants"),
     receiverParticipantId: v.id("participants")
-  })
+  }).index("by_giver", ["giverParticipantId"])
 });
