@@ -1,16 +1,21 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import type { PanInfo } from "motion/react";
+import { Pencil } from "lucide-react";
 import { api } from "@convex/_generated/api";
 import { homeCards } from "@/data/homepage";
 import { useCardDeck } from "@/hooks/useCardDeck";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useAdmin } from "@/hooks/useAdmin";
+import { usePreview } from "@/components/PreviewProvider";
+import { Button } from "@/components/ui/Button";
 import { CardDeckControls } from "./CardDeckControls";
 import { CardDeckDots } from "./CardDeckDots";
 import { HomeCard } from "./HomeCard";
+import { EventDialog, type EventFormValues } from "./dialogs/EventDialog";
 import styles from "./HomeCardDeck.module.css";
 
 const springTransition = {
@@ -85,6 +90,12 @@ export function HomeCardDeck() {
   // Cards are static structure; the summary card's title + facts derive from the
   // live event record so admin edits propagate. Static values are the fallback.
   const event = useQuery(api.event.get);
+  const updateEvent = useMutation(api.event.update);
+  const { isAdmin: isAuthedAdmin } = useAdmin();
+  const { isPreviewing } = usePreview();
+  const isAdmin = isAuthedAdmin && !isPreviewing;
+  const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
+
   const cards = useMemo(() => {
     if (!event) return homeCards;
     return homeCards.map((card) =>
@@ -137,6 +148,12 @@ export function HomeCardDeck() {
     setToast("Album belum dibuka. Sabar, negara sedang memproses.");
   }
 
+  async function handleSaveEvent(values: EventFormValues) {
+    await updateEvent(values);
+    setIsEventDialogOpen(false);
+    setToast("Ringkasan event dikemaskini.");
+  }
+
   return (
     <section
       className={styles.deck}
@@ -164,9 +181,35 @@ export function HomeCardDeck() {
         <CardDeckControls onPrevious={deck.previous} onNext={deck.next} />
       </div>
       <CardDeckDots cards={cards} activeIndex={deck.activeIndex} onSelect={deck.goTo} />
+      {isAdmin ? (
+        <div className={styles.adminBar}>
+          <Button onClick={() => setIsEventDialogOpen(true)} variant="secondary">
+            <Pencil size={16} aria-hidden="true" />
+            Edit Ringkasan
+          </Button>
+        </div>
+      ) : null}
       <div className={styles.toast} aria-live="polite" aria-atomic="true">
         {toast ? <span>{toast}</span> : null}
       </div>
+
+      <EventDialog
+        event={
+          event
+            ? {
+                name: event.name,
+                dateText: event.dateText,
+                durationText: event.durationText,
+                location: event.location,
+                participantCount: event.participantCount,
+                note: event.note
+              }
+            : undefined
+        }
+        onClose={() => setIsEventDialogOpen(false)}
+        onSave={handleSaveEvent}
+        open={isEventDialogOpen}
+      />
     </section>
   );
 }

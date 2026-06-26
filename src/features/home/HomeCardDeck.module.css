@@ -27,6 +27,11 @@
   touch-action: pan-y;
 }
 
+.adminBar {
+  display: flex;
+  justify-content: center;
+}
+
 .toast {
   min-height: 28px;
   color: var(--color-muted);
