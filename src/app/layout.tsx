@@ -28,7 +28,11 @@ export const metadata: Metadata = {
   title: "Arkib Reunion Negara",
   description: "Rekod rasmi untuk gathering yang katanya reunion tapi tahunan.",
   icons: {
-    icon: "/favicon.svg"
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon-96.png", type: "image/png", sizes: "96x96" }
+    ],
+    apple: "/apple-touch-icon.png"
   }
 };
 

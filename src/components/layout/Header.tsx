@@ -30,8 +30,8 @@ export function Header() {
 
   return (
     <header className={styles.header}>
-      <Link className={styles.brand} href="/">
-        Arkib Reunion Negara
+      <Link className={styles.brand} href="/" aria-label="Arkib Reunion Negara">
+        <img className={styles.brandMark} src="/icon.svg" alt="Arkib Reunion Negara" />
       </Link>
       <div className={styles.loginWrap}>
         {isAdmin ? (

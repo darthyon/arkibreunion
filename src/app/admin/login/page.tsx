@@ -4,10 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { LogIn } from "lucide-react";
-import { PageContainer } from "@/components/layout/PageContainer";
-import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { FormField } from "@/components/ui/FormField";
+import styles from "./login.module.css";
 
 export default function AdminLoginPage() {
   const { signIn } = useAuthActions();
@@ -35,27 +34,31 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <PageContainer size="readable">
-      <PageHeader
-        title="Log Masuk Admin"
-        description="Hanya untuk organiser. Rakyat biasa guna PIN di Tukar Hadiah."
-      />
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", maxWidth: 360 }}>
-        <FormField label="Email">
-          <input autoComplete="email" name="email" type="email" placeholder="admin@reunion.my" />
-        </FormField>
+    <div className={styles.screen}>
+      <div className={styles.card}>
+        <header className={styles.head}>
+          <img className={styles.mark} src="/icon.svg" alt="Arkib Reunion Negara" />
+          <h1>Log Masuk Admin</h1>
+          <p>Hanya untuk organiser. Rakyat biasa guna PIN di Tukar Hadiah.</p>
+        </header>
 
-        <FormField label="Kata Laluan">
-          <input autoComplete="current-password" name="password" type="password" placeholder="••••••••" />
-        </FormField>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <FormField label="Email">
+            <input autoComplete="email" name="email" type="email" placeholder="admin@reunion.my" />
+          </FormField>
 
-        {error ? <p style={{ color: "var(--color-danger, #c0392b)" }}>{error}</p> : null}
+          <FormField label="Kata Laluan">
+            <input autoComplete="current-password" name="password" type="password" placeholder="••••••••" />
+          </FormField>
 
-        <Button type="submit" disabled={submitting}>
-          <LogIn size={17} aria-hidden="true" />
-          {submitting ? "Sedang masuk…" : "Log Masuk"}
-        </Button>
-      </form>
-    </PageContainer>
+          {error ? <p className={styles.error}>{error}</p> : null}
+
+          <Button type="submit" disabled={submitting}>
+            <LogIn size={17} aria-hidden="true" />
+            {submitting ? "Sedang masuk…" : "Log Masuk"}
+          </Button>
+        </form>
+      </div>
+    </div>
   );
 }
