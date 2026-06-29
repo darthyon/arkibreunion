@@ -163,18 +163,14 @@ export function TukarHadiahPage() {
     showToast("Peserta dipadam. Cabutan perlu run semula.");
   }
 
-  async function handleResetPin(participant: AdminParticipant) {
+  async function handleResetPin(participant: AdminParticipant): Promise<string> {
     const result = await resetPin({ participantId: participant.id as Id<"participants"> });
-    showToast(`PIN baru ${participant.name}: ${result.pin}`);
+    return result.pin;
   }
 
-  async function handleSendPin(participant: AdminParticipant) {
-    try {
-      await sendPin({ participantId: participant.id as Id<"participants"> });
-      showToast(`PIN baru dihantar ke ${participant.email}.`);
-    } catch (error) {
-      showToast(error instanceof Error ? error.message : "Gagal hantar PIN.");
-    }
+  async function handleSendPin(participant: AdminParticipant): Promise<string> {
+    await sendPin({ participantId: participant.id as Id<"participants"> });
+    return participant.email;
   }
 
   async function handleSendAllPins() {
@@ -333,10 +329,8 @@ export function TukarHadiahPage() {
               setIsParticipantDialogOpen(true);
             }}
             onEditSetup={() => setIsSetupOpen(true)}
-            onResetPin={handleResetPin}
             onRunDraw={() => setIsDrawDialogOpen(true)}
             onSendAllPins={handleSendAllPins}
-            onSendPin={handleSendPin}
             participants={adminParticipants ?? []}
           />
         ) : null}
@@ -376,7 +370,9 @@ export function TukarHadiahPage() {
             setEditingParticipant(undefined);
             setIsParticipantDialogOpen(false);
           }}
+          onResetPin={handleResetPin}
           onSave={handleSaveParticipant}
+          onSendPin={handleSendPin}
           open={isParticipantDialogOpen}
           participant={editingParticipant}
         />

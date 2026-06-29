@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+import { KeyRound, Mail } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { DialogShell } from "@/components/ui/DialogShell";
 import { FormField } from "@/components/ui/FormField";
@@ -6,19 +10,61 @@ import styles from "../TukarHadiahPage.module.css";
 
 type ParticipantDialogProps = {
   onClose: () => void;
+  onResetPin: (participant: AdminParticipant) => Promise<string>;
   onSave: (values: { name: string; email: string; pin?: string }) => void;
+  onSendPin: (participant: AdminParticipant) => Promise<string>;
   open: boolean;
   participant?: AdminParticipant;
 };
 
-export function ParticipantDialog({ onClose, onSave, open, participant }: ParticipantDialogProps) {
+export function ParticipantDialog({
+  onClose,
+  onResetPin,
+  onSave,
+  onSendPin,
+  open,
+  participant
+}: ParticipantDialogProps) {
   const isEditing = Boolean(participant);
+  const [pinStatus, setPinStatus] = useState<string>();
+  const [busy, setBusy] = useState(false);
+
+  function handleClose() {
+    setPinStatus(undefined);
+    onClose();
+  }
+
+  async function handleResetPin() {
+    if (!participant) return;
+    setBusy(true);
+    try {
+      const pin = await onResetPin(participant);
+      setPinStatus(`PIN baru: ${pin}`);
+    } catch (error) {
+      setPinStatus(error instanceof Error ? error.message : "Gagal reset PIN.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleSendPin() {
+    if (!participant) return;
+    setBusy(true);
+    try {
+      const email = await onSendPin(participant);
+      setPinStatus(`PIN baru dihantar ke ${email}.`);
+    } catch (error) {
+      setPinStatus(error instanceof Error ? error.message : "Gagal hantar PIN.");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   return (
     <DialogShell
       footer={
         <>
-          <Button onClick={onClose} variant="secondary">
+          <Button onClick={handleClose} variant="secondary">
             Cancel
           </Button>
           <Button form="participant-form" type="submit">
@@ -28,7 +74,7 @@ export function ParticipantDialog({ onClose, onSave, open, participant }: Partic
       }
       onOpenChange={(nextOpen) => {
         if (!nextOpen) {
-          onClose();
+          handleClose();
         }
       }}
       open={open}
@@ -68,6 +114,22 @@ export function ParticipantDialog({ onClose, onSave, open, participant }: Partic
           </FormField>
         )}
       </form>
+
+      {isEditing && participant ? (
+        <div className={styles.pinControls}>
+          <div className={styles.pinControlButtons}>
+            <Button disabled={busy} onClick={handleResetPin} variant="secondary">
+              <KeyRound size={16} aria-hidden="true" />
+              Reset PIN
+            </Button>
+            <Button disabled={busy || !participant.email} onClick={handleSendPin} variant="secondary">
+              <Mail size={16} aria-hidden="true" />
+              Hantar PIN
+            </Button>
+          </div>
+          {pinStatus ? <p className={styles.pinStatus}>{pinStatus}</p> : null}
+        </div>
+      ) : null}
     </DialogShell>
   );
 }

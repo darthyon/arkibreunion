@@ -8,12 +8,12 @@ export const adminList = query({
   handler: async (ctx) => {
     await requireAdmin(ctx);
     const assignments = await ctx.db.query("assignments").collect();
-    const rows: { id: string; giver: string; receiver: string }[] = [];
+    const rows: { id: string; giverId: string; giver: string; receiver: string }[] = [];
     for (const a of assignments) {
       const giver = await ctx.db.get(a.giverParticipantId);
       const receiver = await ctx.db.get(a.receiverParticipantId);
       if (giver && receiver) {
-        rows.push({ id: a._id, giver: giver.name, receiver: receiver.name });
+        rows.push({ id: a._id, giverId: a.giverParticipantId, giver: giver.name, receiver: receiver.name });
       }
     }
     return rows.sort((x, y) => x.giver.localeCompare(y.giver));

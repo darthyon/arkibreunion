@@ -1,20 +1,10 @@
-import {
-  AlertCircle,
-  ArrowRight,
-  ClipboardCheck,
-  Gift,
-  LockKeyhole,
-  Mail,
-  Plus,
-  Settings,
-  Users
-} from "lucide-react";
+import { AlertCircle, ClipboardCheck, Gift, LockKeyhole, Mail, Plus, Settings, Users } from "lucide-react";
 import { ActionMenu } from "@/components/ui/ActionMenu";
 import type { AdminParticipant, GiftExchange } from "@/types/gift-exchange";
 import { ParticipantList } from "./ParticipantList";
 import styles from "./TukarHadiahPage.module.css";
 
-type AdminAssignment = { id: string; giver: string; receiver: string };
+type AdminAssignment = { id: string; giverId: string; giver: string; receiver: string };
 
 type AdminGiftPanelProps = {
   assignments: AdminAssignment[];
@@ -24,10 +14,8 @@ type AdminGiftPanelProps = {
   onDeleteParticipant: (participant: AdminParticipant) => void;
   onEditParticipant: (participant: AdminParticipant) => void;
   onEditSetup: () => void;
-  onResetPin: (participant: AdminParticipant) => void;
   onRunDraw: () => void;
   onSendAllPins: () => void;
-  onSendPin: (participant: AdminParticipant) => void;
   participants: AdminParticipant[];
 };
 
@@ -39,10 +27,8 @@ export function AdminGiftPanel({
   onDeleteParticipant,
   onEditParticipant,
   onEditSetup,
-  onResetPin,
   onRunDraw,
   onSendAllPins,
-  onSendPin,
   participants
 }: AdminGiftPanelProps) {
   const withEmail = participants.filter((participant) => participant.email).length;
@@ -128,35 +114,13 @@ export function AdminGiftPanel({
             <span>{participants.length} peserta</span>
           </div>
           <ParticipantList
+            assignments={assignments}
             onDelete={onDeleteParticipant}
             onEdit={onEditParticipant}
-            onResetPin={onResetPin}
-            onSendPin={onSendPin}
             participants={participants}
           />
         </section>
       </div>
-
-      {exchange.isDrawn && assignments.length > 0 ? (
-        <section className={styles.adminSection}>
-          <div className={styles.subsectionHeader}>
-            <div>
-              <h3>Cabutan</h3>
-              <p>Siapa beli untuk siapa. Hanya admin nampak senarai penuh.</p>
-            </div>
-            <span>{assignments.length} pasangan</span>
-          </div>
-          <ul className={styles.assignmentList}>
-            {assignments.map((assignment) => (
-              <li className={styles.assignmentRow} key={assignment.id}>
-                <strong>{assignment.giver}</strong>
-                <ArrowRight size={16} aria-hidden="true" />
-                <span>{assignment.receiver}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
     </section>
   );
 }
