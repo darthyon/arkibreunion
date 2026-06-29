@@ -159,6 +159,9 @@ export default defineSchema({
   // PINs are hashed at rest. failedAttempts/lockedUntil drive rate limiting.
   participants: defineTable({
     name: v.string(),
+    // Optional at the DB layer (seeded rows predate it); required for new
+    // participants at the mutation/UI layer. Used to email the PIN.
+    email: v.optional(v.string()),
     pinHash: v.string(), // "saltHex:derivedHex" — PBKDF2, never plaintext
     wishlist: v.optional(v.string()),
     hasSubmittedWishlist: v.boolean(),

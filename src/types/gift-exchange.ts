@@ -12,6 +12,7 @@ export type GiftExchange = {
 export type AdminParticipant = {
   id: string;
   name: string;
+  email: string;
   hasSubmittedWishlist: boolean;
   wishlist: string;
   isLocked: boolean;

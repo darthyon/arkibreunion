@@ -64,6 +64,8 @@ export function TukarHadiahPage() {
   const updateParticipant = useMutation(api.participants.update);
   const removeParticipant = useMutation(api.participants.remove);
   const resetPin = useMutation(api.participants.resetPin);
+  const sendPin = useAction(api.email.sendPin);
+  const sendAllPins = useAction(api.email.sendAllPins);
 
   const exchange: GiftExchange = {
     id: exchangeDoc?._id ?? "",
@@ -134,15 +136,20 @@ export function TukarHadiahPage() {
     showToast("Setup Tukar Hadiah dikemaskini.");
   }
 
-  async function handleSaveParticipant(values: { name: string; pin?: string }) {
+  async function handleSaveParticipant(values: { name: string; email: string; pin?: string }) {
     if (editingParticipant) {
       await updateParticipant({
         participantId: editingParticipant.id as Id<"participants">,
-        name: values.name
+        name: values.name,
+        email: values.email
       });
       showToast("Peserta dikemaskini.");
     } else {
-      const result = await createParticipant({ name: values.name, pin: values.pin });
+      const result = await createParticipant({
+        name: values.name,
+        email: values.email,
+        pin: values.pin
+      });
       showToast(`Peserta ditambah. PIN ${values.name}: ${result.pin}`);
     }
     setEditingParticipant(undefined);
@@ -159,6 +166,25 @@ export function TukarHadiahPage() {
   async function handleResetPin(participant: AdminParticipant) {
     const result = await resetPin({ participantId: participant.id as Id<"participants"> });
     showToast(`PIN baru ${participant.name}: ${result.pin}`);
+  }
+
+  async function handleSendPin(participant: AdminParticipant) {
+    try {
+      await sendPin({ participantId: participant.id as Id<"participants"> });
+      showToast(`PIN baru dihantar ke ${participant.email}.`);
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : "Gagal hantar PIN.");
+    }
+  }
+
+  async function handleSendAllPins() {
+    try {
+      const result = await sendAllPins({});
+      const skipNote = result.skipped.length > 0 ? ` Skip (tiada email): ${result.skipped.join(", ")}.` : "";
+      showToast(`PIN dihantar ke ${result.sent} peserta.${skipNote}`);
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : "Gagal hantar PIN.");
+    }
   }
 
   async function handleRunDraw() {
@@ -309,6 +335,8 @@ export function TukarHadiahPage() {
             onEditSetup={() => setIsSetupOpen(true)}
             onResetPin={handleResetPin}
             onRunDraw={() => setIsDrawDialogOpen(true)}
+            onSendAllPins={handleSendAllPins}
+            onSendPin={handleSendPin}
             participants={adminParticipants ?? []}
           />
         ) : null}

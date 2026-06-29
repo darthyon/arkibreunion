@@ -6,7 +6,7 @@ import styles from "../TukarHadiahPage.module.css";
 
 type ParticipantDialogProps = {
   onClose: () => void;
-  onSave: (values: { name: string; pin?: string }) => void;
+  onSave: (values: { name: string; email: string; pin?: string }) => void;
   open: boolean;
   participant?: AdminParticipant;
 };
@@ -43,12 +43,23 @@ export function ParticipantDialog({ onClose, onSave, open, participant }: Partic
           const pin = String(formData.get("pin") ?? "").trim();
           onSave({
             name: String(formData.get("name") ?? "").trim(),
+            email: String(formData.get("email") ?? "").trim(),
             pin: pin.length > 0 ? pin : undefined
           });
         }}
       >
         <FormField label="Name">
           <input defaultValue={participant?.name} name="name" placeholder="Nama peserta" required />
+        </FormField>
+
+        <FormField label="Email">
+          <input
+            defaultValue={participant?.email}
+            name="email"
+            placeholder="nama@email.com"
+            required
+            type="email"
+          />
         </FormField>
 
         {isEditing ? null : (

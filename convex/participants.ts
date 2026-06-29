@@ -174,6 +174,7 @@ export const list = query({
     return all.map((p) => ({
       id: p._id,
       name: p.name,
+      email: p.email ?? "",
       hasSubmittedWishlist: p.hasSubmittedWishlist,
       wishlist: p.wishlist ?? "",
       isLocked: !!p.lockedUntil && p.lockedUntil > Date.now()
@@ -185,13 +186,14 @@ export const list = query({
 // plaintext PIN once so the admin can hand it out — it is never stored or
 // returned again.
 export const create = mutation({
-  args: { name: v.string(), pin: v.optional(v.string()) },
-  handler: async (ctx, { name, pin }) => {
+  args: { name: v.string(), email: v.string(), pin: v.optional(v.string()) },
+  handler: async (ctx, { name, email, pin }) => {
     await requireAdmin(ctx);
     const plainPin = pin ?? String(Math.floor(1000 + Math.random() * 9000));
     const pinHash = await hashPin(plainPin);
     const id = await ctx.db.insert("participants", {
       name: name.trim(),
+      email: email.trim(),
       pinHash,
       hasSubmittedWishlist: false,
       failedAttempts: 0,
@@ -202,15 +204,26 @@ export const create = mutation({
   }
 });
 
-// Admin renames a participant. PIN changes go through resetPin.
+// Admin edits name + email. PIN changes go through resetPin / sendPin.
 export const update = mutation({
-  args: { participantId: v.id("participants"), name: v.string() },
-  handler: async (ctx, { participantId, name }) => {
+  args: { participantId: v.id("participants"), name: v.string(), email: v.string() },
+  handler: async (ctx, { participantId, name, email }) => {
     await requireAdmin(ctx);
     await ctx.db.patch(participantId, {
       name: name.trim(),
+      email: email.trim(),
       updatedAt: new Date().toISOString()
     });
+  }
+});
+
+// Internal: participant name + email for the PIN-email action.
+export const _getContact = internalQuery({
+  args: { participantId: v.id("participants") },
+  handler: async (ctx, { participantId }) => {
+    const p = await ctx.db.get(participantId);
+    if (!p) return null;
+    return { name: p.name, email: p.email ?? "" };
   }
 });
 

@@ -12,6 +12,7 @@ import type * as admin from "../admin.js";
 import type * as archive from "../archive.js";
 import type * as assignments from "../assignments.js";
 import type * as auth from "../auth.js";
+import type * as email from "../email.js";
 import type * as event from "../event.js";
 import type * as giftExchange from "../giftExchange.js";
 import type * as http from "../http.js";
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   archive: typeof archive;
   assignments: typeof assignments;
   auth: typeof auth;
+  email: typeof email;
   event: typeof event;
   giftExchange: typeof giftExchange;
   http: typeof http;

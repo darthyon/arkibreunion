@@ -1,4 +1,14 @@
-import { AlertCircle, ArrowRight, ClipboardCheck, Gift, LockKeyhole, Plus, Settings, Users } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowRight,
+  ClipboardCheck,
+  Gift,
+  LockKeyhole,
+  Mail,
+  Plus,
+  Settings,
+  Users
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import type { AdminParticipant, GiftExchange } from "@/types/gift-exchange";
 import { ParticipantList } from "./ParticipantList";
@@ -16,6 +26,8 @@ type AdminGiftPanelProps = {
   onEditSetup: () => void;
   onResetPin: (participant: AdminParticipant) => void;
   onRunDraw: () => void;
+  onSendAllPins: () => void;
+  onSendPin: (participant: AdminParticipant) => void;
   participants: AdminParticipant[];
 };
 
@@ -29,8 +41,11 @@ export function AdminGiftPanel({
   onEditSetup,
   onResetPin,
   onRunDraw,
+  onSendAllPins,
+  onSendPin,
   participants
 }: AdminGiftPanelProps) {
+  const withEmail = participants.filter((participant) => participant.email).length;
   const submittedWishlistCount = participants.filter((participant) => participant.hasSubmittedWishlist).length;
 
   return (
@@ -49,6 +64,10 @@ export function AdminGiftPanel({
           <Button onClick={onAddParticipant} variant="secondary">
             <Plus size={17} aria-hidden="true" />
             Tambah Peserta
+          </Button>
+          <Button disabled={withEmail === 0} onClick={onSendAllPins} variant="secondary">
+            <Mail size={17} aria-hidden="true" />
+            Hantar Semua PIN
           </Button>
           <Button disabled={participants.length < 3} onClick={onRunDraw}>
             <Gift size={17} aria-hidden="true" />
@@ -102,6 +121,7 @@ export function AdminGiftPanel({
             onDelete={onDeleteParticipant}
             onEdit={onEditParticipant}
             onResetPin={onResetPin}
+            onSendPin={onSendPin}
             participants={participants}
           />
         </section>
