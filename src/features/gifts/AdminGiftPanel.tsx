@@ -9,7 +9,7 @@ import {
   Settings,
   Users
 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { ActionMenu } from "@/components/ui/ActionMenu";
 import type { AdminParticipant, GiftExchange } from "@/types/gift-exchange";
 import { ParticipantList } from "./ParticipantList";
 import styles from "./TukarHadiahPage.module.css";
@@ -57,22 +57,32 @@ export function AdminGiftPanel({
           <p>Kemaskini peserta, wishlist, dan cabutan hadiah.</p>
         </div>
         <div className={styles.adminActions}>
-          <Button onClick={onEditSetup} variant="secondary">
-            <Settings size={17} aria-hidden="true" />
-            Edit Setup
-          </Button>
-          <Button onClick={onAddParticipant} variant="secondary">
-            <Plus size={17} aria-hidden="true" />
-            Tambah Peserta
-          </Button>
-          <Button disabled={withEmail === 0} onClick={onSendAllPins} variant="secondary">
-            <Mail size={17} aria-hidden="true" />
-            Hantar Semua PIN
-          </Button>
-          <Button disabled={participants.length < 3} onClick={onRunDraw}>
-            <Gift size={17} aria-hidden="true" />
-            {exchange.isDrawn ? "Run Semula" : "Run Draw"}
-          </Button>
+          <ActionMenu
+            items={[
+              {
+                label: "Edit Info",
+                icon: <Settings size={17} aria-hidden="true" />,
+                onClick: onEditSetup
+              },
+              {
+                label: "Tambah Peserta",
+                icon: <Plus size={17} aria-hidden="true" />,
+                onClick: onAddParticipant
+              },
+              {
+                label: "Hantar Semua PIN",
+                icon: <Mail size={17} aria-hidden="true" />,
+                onClick: onSendAllPins,
+                disabled: withEmail === 0
+              },
+              {
+                label: exchange.isDrawn ? "Run Semula" : "Run Draw",
+                icon: <Gift size={17} aria-hidden="true" />,
+                onClick: onRunDraw,
+                disabled: participants.length < 3
+              }
+            ]}
+          />
         </div>
       </header>
 

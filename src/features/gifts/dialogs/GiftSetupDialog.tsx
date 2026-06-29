@@ -30,7 +30,7 @@ export function GiftSetupDialog({ exchange, onClose, onSave, open }: GiftSetupDi
         }
       }}
       open={open}
-      title="Edit Setup"
+      title="Edit Info"
     >
       <form
         className={styles.dialogForm}

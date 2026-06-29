@@ -1,0 +1,55 @@
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.positioner {
+  z-index: 60;
+}
+
+.popup {
+  display: grid;
+  width: 248px;
+  gap: 4px;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  padding: 8px;
+  background: var(--color-surface);
+  box-shadow: 0 20px 48px rgba(18, 18, 18, 0.13);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  border-radius: 14px;
+  padding: 11px 12px;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: default;
+  user-select: none;
+}
+
+.item[data-highlighted] {
+  background: rgba(18, 18, 18, 0.05);
+}
+
+.item[data-disabled] {
+  color: var(--color-subtle);
+  pointer-events: none;
+}
+
+.item svg {
+  color: var(--color-muted);
+}
