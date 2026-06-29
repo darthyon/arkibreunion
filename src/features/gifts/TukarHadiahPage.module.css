@@ -419,14 +419,28 @@
   gap: 10px;
 }
 
+.participantName {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.participantName h3 {
+  margin: 0;
+}
+
 .cabutanCell {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
 }
 
 .cabutanCell svg {
-  color: var(--color-muted);
+  color: var(--color-red-card);
 }
 
 .pinControls {
@@ -461,7 +475,7 @@
 }
 
 .participantCard h3 {
-  margin: 0 0 12px;
+  margin: 0;
   font-size: 1rem;
   font-weight: 600;
 }

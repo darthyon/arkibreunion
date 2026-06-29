@@ -26,7 +26,15 @@ export function ParticipantList({ assignments, onDelete, onEdit, participants }:
         return (
           <article className={styles.participantCard} key={participant.id}>
             <div>
-              <h3>{participant.name}</h3>
+              <div className={styles.participantName}>
+                <h3>{participant.name}</h3>
+                {receiver ? (
+                  <span className={styles.cabutanCell}>
+                    <ArrowRight size={15} aria-hidden="true" />
+                    {receiver}
+                  </span>
+                ) : null}
+              </div>
               <dl>
                 <div>
                   <dt>Email</dt>
@@ -35,19 +43,6 @@ export function ParticipantList({ assignments, onDelete, onEdit, participants }:
                 <div>
                   <dt>Wishlist</dt>
                   <dd>{participant.hasSubmittedWishlist ? "Submitted" : "Belum isi"}</dd>
-                </div>
-                <div>
-                  <dt>Cabutan</dt>
-                  <dd>
-                    {receiver ? (
-                      <span className={styles.cabutanCell}>
-                        <ArrowRight size={14} aria-hidden="true" />
-                        {receiver}
-                      </span>
-                    ) : (
-                      "Belum draw"
-                    )}
-                  </dd>
                 </div>
               </dl>
             </div>
