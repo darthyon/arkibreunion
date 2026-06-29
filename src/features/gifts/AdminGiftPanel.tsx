@@ -1,10 +1,13 @@
-import { AlertCircle, ClipboardCheck, Gift, LockKeyhole, Plus, Settings, Users } from "lucide-react";
+import { AlertCircle, ArrowRight, ClipboardCheck, Gift, LockKeyhole, Plus, Settings, Users } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import type { AdminParticipant, GiftExchange } from "@/types/gift-exchange";
 import { ParticipantList } from "./ParticipantList";
 import styles from "./TukarHadiahPage.module.css";
 
+type AdminAssignment = { id: string; giver: string; receiver: string };
+
 type AdminGiftPanelProps = {
+  assignments: AdminAssignment[];
   drawError?: string;
   exchange: GiftExchange;
   onAddParticipant: () => void;
@@ -17,6 +20,7 @@ type AdminGiftPanelProps = {
 };
 
 export function AdminGiftPanel({
+  assignments,
   drawError,
   exchange,
   onAddParticipant,
@@ -102,6 +106,27 @@ export function AdminGiftPanel({
           />
         </section>
       </div>
+
+      {exchange.isDrawn && assignments.length > 0 ? (
+        <section className={styles.adminSection}>
+          <div className={styles.subsectionHeader}>
+            <div>
+              <h3>Cabutan</h3>
+              <p>Siapa beli untuk siapa. Hanya admin nampak senarai penuh.</p>
+            </div>
+            <span>{assignments.length} pasangan</span>
+          </div>
+          <ul className={styles.assignmentList}>
+            {assignments.map((assignment) => (
+              <li className={styles.assignmentRow} key={assignment.id}>
+                <strong>{assignment.giver}</strong>
+                <ArrowRight size={16} aria-hidden="true" />
+                <span>{assignment.receiver}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </section>
   );
 }

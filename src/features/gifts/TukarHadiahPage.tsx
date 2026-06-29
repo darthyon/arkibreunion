@@ -59,6 +59,7 @@ export function TukarHadiahPage() {
 
   // --- Admin roster (only queried when admin; query is admin-gated) ---
   const adminParticipants = useQuery(api.participants.list, isAdmin ? {} : "skip");
+  const adminAssignments = useQuery(api.assignments.adminList, isAdmin ? {} : "skip");
   const createParticipant = useMutation(api.participants.create);
   const updateParticipant = useMutation(api.participants.update);
   const removeParticipant = useMutation(api.participants.remove);
@@ -293,6 +294,7 @@ export function TukarHadiahPage() {
 
         {isAdmin ? (
           <AdminGiftPanel
+            assignments={adminAssignments ?? []}
             drawError={drawError}
             exchange={exchange}
             onAddParticipant={() => {

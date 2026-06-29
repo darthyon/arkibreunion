@@ -10,6 +10,7 @@
 
 import type * as admin from "../admin.js";
 import type * as archive from "../archive.js";
+import type * as assignments from "../assignments.js";
 import type * as auth from "../auth.js";
 import type * as event from "../event.js";
 import type * as giftExchange from "../giftExchange.js";
@@ -31,6 +32,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   admin: typeof admin;
   archive: typeof archive;
+  assignments: typeof assignments;
   auth: typeof auth;
   event: typeof event;
   giftExchange: typeof giftExchange;

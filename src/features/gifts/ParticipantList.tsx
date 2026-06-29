@@ -26,10 +26,6 @@ export function ParticipantList({ onDelete, onEdit, onResetPin, participants }: 
                 <dt>Wishlist</dt>
                 <dd>{participant.hasSubmittedWishlist ? "Submitted" : "Belum isi"}</dd>
               </div>
-              <div>
-                <dt>Status</dt>
-                <dd>{participant.isLocked ? "Terkunci sementara" : "Aktif"}</dd>
-              </div>
             </dl>
           </div>
 
