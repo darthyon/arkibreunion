@@ -102,3 +102,12 @@ Convex agent skills for common tasks can be installed by running
 `npx convex ai-files install`.
 
 <!-- convex-ai-end -->
+
+## Testing
+
+- Write tests in Playwright (E2E) + Vitest (unit).
+- Never run tests during chat. Output terminal command for me to run.
+- When I paste failure output, diagnose and fix only what's broken.
+- No screenshot-based visual testing. No browser preview.
+- Playwright MCP only when I explicitly ask. Never fire it proactively.
+- After every completed task, list test cases for me to check manually. Cover happy path + edge cases + error states.
