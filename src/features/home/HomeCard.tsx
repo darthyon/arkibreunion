@@ -3,29 +3,25 @@
 import type { HomeCardItem } from "@/types/homepage";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ArrowRight, CalendarDays, Clock3, MapPin, NotebookText, UsersRound } from "lucide-react";
-import { motion, type PanInfo, type Transition } from "motion/react";
+import { motion, useTransform, type MotionValue } from "motion/react";
+import { wrapPosition } from "@/hooks/useCardDeck";
+import type { DeckRanges } from "./deck-ranges";
 import styles from "./HomeCard.module.css";
 
 type HomeCardProps = {
   card: HomeCardItem;
   isActive: boolean;
   distance: number;
-  motionState: {
-    x: number;
-    y: number;
-    scale: number;
-    rotate: number;
-    // An array is a fade-in keyframe, used when the card loops to the far side.
-    opacity: number | number[];
-    zIndex: number;
-  };
-  transition: Transition;
-  dragEnabled: boolean;
+  /** This card's index in the deck, used to derive its offset from centre. */
+  index: number;
+  /** Shared, fractional position of the whole deck. */
+  offset: MotionValue<number>;
+  itemCount: number;
+  ranges: DeckRanges;
   onSelect: () => void;
   onComingSoon: () => void;
-  onDragEnd: (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => void;
 };
 
 const summaryIcons = {
@@ -96,23 +92,30 @@ export function HomeCard({
   card,
   isActive,
   distance,
-  motionState,
-  transition,
-  dragEnabled,
+  index,
+  offset,
+  itemCount,
+  ranges,
   onSelect,
-  onComingSoon,
-  onDragEnd
+  onComingSoon
 }: HomeCardProps) {
-  const didDragRef = useRef(false);
   const stateClass =
     Math.abs(distance) === 0 ? styles.active : Math.abs(distance) === 1 ? styles.near : styles.far;
 
-  function handleCardClick() {
-    if (didDragRef.current) {
-      didDragRef.current = false;
-      return;
-    }
+  // How far this card sits from the centre right now, looped into the deck's
+  // range so it re-enters from the opposite side.
+  const position = useTransform(offset, (value) => wrapPosition(index - value, itemCount));
 
+  const x = useTransform(position, ranges.anchors, ranges.x);
+  const y = useTransform(position, ranges.anchors, ranges.y);
+  const scale = useTransform(position, ranges.anchors, ranges.scale);
+  const rotate = useTransform(position, ranges.anchors, ranges.rotate);
+  const opacity = useTransform(position, ranges.anchors, ranges.opacity);
+  const zIndexValue = useTransform(position, ranges.anchors, ranges.zIndex);
+  // z-index has to be an integer, and interpolation produces fractions.
+  const zIndex = useTransform(zIndexValue, Math.round);
+
+  function handleCardClick() {
     if (isActive && card.isComingSoon) {
       onComingSoon();
       return;
@@ -125,18 +128,18 @@ export function HomeCard({
     <SummaryCountdown targetDate={card.countdownTargetDate} />
   ) : isActive ? (
     card.isComingSoon ? (
-      <button className={styles.cta} type="button" onPointerDown={(event) => event.stopPropagation()} onClick={onComingSoon}>
+      <button className={styles.cta} type="button" onClick={onComingSoon}>
         <span>{card.cta}</span>
         <ArrowRight size={17} aria-hidden="true" />
       </button>
     ) : (
-      <Link className={styles.cta} href={card.href} onPointerDown={(event) => event.stopPropagation()}>
+      <Link className={styles.cta} href={card.href}>
         <span>{card.cta}</span>
         <ArrowRight size={17} aria-hidden="true" />
       </Link>
     )
   ) : (
-    <button className={styles.cta} type="button" onPointerDown={(event) => event.stopPropagation()} onClick={onSelect}>
+    <button className={styles.cta} type="button" onClick={onSelect}>
       <span>{card.cta}</span>
       <ArrowRight size={17} aria-hidden="true" />
     </button>
@@ -145,34 +148,7 @@ export function HomeCard({
   return (
     <motion.article
       className={`${styles.card} ${styles[card.tone]} ${stateClass}`}
-      animate={motionState}
-      drag={dragEnabled ? "x" : false}
-      dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={0.28}
-      dragMomentum={false}
-      onDragStart={() => {
-        didDragRef.current = false;
-      }}
-      onDrag={(_, info) => {
-        if (Math.abs(info.offset.x) > 6) {
-          didDragRef.current = true;
-        }
-      }}
-      onDragEnd={(event, info) => {
-        onDragEnd(event, info);
-        window.setTimeout(() => {
-          didDragRef.current = false;
-        }, 80);
-      }}
-      transition={transition}
-      whileDrag={
-        dragEnabled
-          ? {
-              cursor: "grabbing",
-              scale: 1.01
-            }
-          : undefined
-      }
+      style={{ x, y, scale, rotate, opacity, zIndex }}
       aria-current={isActive ? "true" : undefined}
     >
       <button

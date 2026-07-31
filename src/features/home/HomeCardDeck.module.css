@@ -24,7 +24,14 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  /* The whole surface is draggable, so the browser keeps vertical scrolling
+     and we take horizontal movement. */
   touch-action: pan-y;
+  cursor: grab;
+}
+
+.dragging {
+  cursor: grabbing;
 }
 
 .adminBar {
