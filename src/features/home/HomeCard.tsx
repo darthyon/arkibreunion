@@ -17,9 +17,9 @@ type HomeCardProps = {
     y: number;
     scale: number;
     rotate: number;
-    opacity: number;
+    // An array is a fade-in keyframe, used when the card loops to the far side.
+    opacity: number | number[];
     zIndex: number;
-    boxShadow: string;
   };
   transition: Transition;
   dragEnabled: boolean;
@@ -164,13 +164,12 @@ export function HomeCard({
           didDragRef.current = false;
         }, 80);
       }}
-      style={{ zIndex: motionState.zIndex }}
       transition={transition}
       whileDrag={
         dragEnabled
           ? {
               cursor: "grabbing",
-              scale: motionState.scale * 1.01
+              scale: 1.01
             }
           : undefined
       }

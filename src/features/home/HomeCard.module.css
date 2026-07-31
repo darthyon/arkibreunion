@@ -190,12 +190,36 @@
   transform: scale(0.96);
 }
 
+/* Depth shadows live here rather than in the animated style object: motion was
+   interpolating the shadow string every frame on all five cards, which forces
+   an uncomposited repaint. A CSS transition hands it to the compositor. */
 .active {
+  box-shadow:
+    0 24px 56px rgba(20, 18, 12, 0.18),
+    0 5px 15px rgba(20, 18, 12, 0.1);
   cursor: grab;
+}
+
+.near {
+  box-shadow: 0 16px 34px rgba(20, 18, 12, 0.14);
+}
+
+.far {
+  box-shadow: 0 10px 24px rgba(20, 18, 12, 0.11);
+}
+
+.card {
+  transition: box-shadow 0.34s ease;
 }
 
 .active:active {
   cursor: grabbing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
 }
 
 .near .cta,

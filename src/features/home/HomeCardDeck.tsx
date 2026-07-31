@@ -29,6 +29,13 @@ const reducedTransition = {
   duration: 0.01
 } as const;
 
+// Back cards trail the front one slightly so the stack reads as layered depth
+// rather than one rigid object sliding sideways.
+const DEPTH_STAGGER = 0.035;
+
+// zIndex is animated, not snapped. Motion coerces it with the `int` value type,
+// so the interpolated values stay valid CSS and cards cross over each other
+// mid-flight instead of popping in front on the first frame.
 function getCardMotion(distance: number, mode: "desktop" | "tablet" | "mobile") {
   const sign = Math.sign(distance);
   const abs = Math.abs(distance);
@@ -40,15 +47,7 @@ function getCardMotion(distance: number, mode: "desktop" | "tablet" | "mobile") 
   }[mode];
 
   if (abs === 0) {
-    return {
-      x: 0,
-      y: 0,
-      scale: 1,
-      rotate: 0,
-      opacity: 1,
-      zIndex: 30,
-      boxShadow: "0 24px 56px rgba(20, 18, 12, 0.18), 0 5px 15px rgba(20, 18, 12, 0.1)"
-    };
+    return { x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, zIndex: 30 };
   }
 
   if (abs === 1) {
@@ -58,8 +57,7 @@ function getCardMotion(distance: number, mode: "desktop" | "tablet" | "mobile") 
       scale: mode === "mobile" ? 0.92 : 0.88,
       rotate: sign * (mode === "mobile" ? 1.4 : 2),
       opacity: 0.96,
-      zIndex: 20,
-      boxShadow: "0 16px 34px rgba(20, 18, 12, 0.14)"
+      zIndex: 20
     };
   }
 
@@ -70,8 +68,7 @@ function getCardMotion(distance: number, mode: "desktop" | "tablet" | "mobile") 
       scale: mode === "mobile" ? 0.8 : 0.78,
       rotate: sign * (mode === "mobile" ? 2.3 : 3.5),
       opacity: mode === "mobile" ? 0.55 : 0.9,
-      zIndex: 10,
-      boxShadow: "0 10px 24px rgba(20, 18, 12, 0.11)"
+      zIndex: 10
     };
   }
 
@@ -81,8 +78,46 @@ function getCardMotion(distance: number, mode: "desktop" | "tablet" | "mobile") 
     scale: 0.72,
     rotate: sign * 4,
     opacity: 0,
-    zIndex: 0,
-    boxShadow: "0 0 0 rgba(20, 18, 12, 0)"
+    zIndex: 0
+  };
+}
+
+// A card that jumps from one end of the deck to the other (distance +2 becomes
+// -2 on a 5-card loop) must not spring across the whole stack. Move it
+// instantly while it is invisible, then fade it back in on the far side.
+function getCardTransition({
+  distance,
+  wrapped,
+  velocity,
+  prefersReducedMotion
+}: {
+  distance: number;
+  wrapped: boolean;
+  velocity: number;
+  prefersReducedMotion: boolean;
+}) {
+  if (prefersReducedMotion) {
+    return reducedTransition;
+  }
+
+  if (wrapped) {
+    const instant = { duration: 0 } as const;
+
+    return {
+      ...springTransition,
+      x: instant,
+      y: instant,
+      rotate: instant,
+      scale: instant,
+      zIndex: instant,
+      opacity: { duration: 0.26, ease: "easeOut" }
+    };
+  }
+
+  return {
+    ...springTransition,
+    delay: Math.abs(distance) * DEPTH_STAGGER,
+    x: { ...springTransition, velocity, delay: Math.abs(distance) * DEPTH_STAGGER }
   };
 }
 
@@ -125,7 +160,12 @@ export function HomeCardDeck() {
   const [toast, setToast] = useState<string | null>(null);
 
   const mode = isMobile ? "mobile" : isTablet ? "tablet" : "desktop";
-  const transition = prefersReducedMotion ? reducedTransition : springTransition;
+
+  const placements = cards.map((card, index) => {
+    const distance = deck.getDistance(index);
+
+    return { card, index, distance, wrapped: deck.hasWrapped(distance) };
+  });
 
   useEffect(() => {
     if (!toast) {
@@ -163,20 +203,31 @@ export function HomeCardDeck() {
     >
       <div className={styles.frame}>
         <div className={styles.cards}>
-        {cards.map((card, index) => (
-            <HomeCard
-              key={card.id}
-              card={card}
-              distance={deck.getDistance(index)}
-              isActive={index === deck.activeIndex}
-              motionState={getCardMotion(deck.getDistance(index), mode)}
-              transition={transition}
-              dragEnabled={index === deck.activeIndex}
-              onDragEnd={handleDragEnd}
-              onSelect={() => deck.goTo(index)}
-              onComingSoon={showAlbumToast}
-            />
-        ))}
+        {placements.map(({ card, index, distance, wrapped }) => {
+            const motionState = getCardMotion(distance, mode);
+
+            return (
+              <HomeCard
+                key={card.id}
+                card={card}
+                distance={distance}
+                isActive={index === deck.activeIndex}
+                motionState={
+                  wrapped ? { ...motionState, opacity: [0, motionState.opacity] } : motionState
+                }
+                transition={getCardTransition({
+                  distance,
+                  wrapped,
+                  velocity: deck.dragVelocity,
+                  prefersReducedMotion
+                })}
+                dragEnabled={index === deck.activeIndex}
+                onDragEnd={handleDragEnd}
+                onSelect={() => deck.goTo(index)}
+                onComingSoon={showAlbumToast}
+              />
+            );
+        })}
         </div>
         <CardDeckControls onPrevious={deck.previous} onNext={deck.next} />
       </div>
